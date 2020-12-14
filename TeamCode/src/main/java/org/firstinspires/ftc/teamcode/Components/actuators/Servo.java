@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.actuators;
+package org.firstinspires.ftc.teamcode.Components.actuators;
 
-import org.firstinspires.ftc.teamcode.opmodes.Globals;
+import org.firstinspires.ftc.teamcode.Utilities.Globals;
 
 public class Servo extends BaseActuator{
     double position;
@@ -8,6 +8,7 @@ public class Servo extends BaseActuator{
     com.qualcomm.robotcore.hardware.Servo internal_servo;
 
     public Servo(String name){
+        super();
         internal_servo = Globals.hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, name);
     }
 
@@ -17,7 +18,7 @@ public class Servo extends BaseActuator{
 
     @Override
     public void update() {
-
+        internal_servo.setPosition(position);
     }
 
     @Override
