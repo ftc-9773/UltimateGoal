@@ -1,14 +1,29 @@
 package org.firstinspires.ftc.teamcode.Attachments;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.teamcode.Components.actuators.Motor;
 
 public class Intake {
-    Motor motorTheFirst;
-    Motor motorTheSecond;
-
+    public Motor motor;
+    double motorSpeed = -1;
+    static String TAG = "INTAKE";
 
     public Intake() {
-        motorTheFirst = new Motor("iMotor1");
-        motorTheSecond = new Motor("iMotor2");
+        motor = new Motor("iMotor");
+        Log.d(TAG, "Created Intake");
     }
+
+    public void on(){
+        motor.setPower(motorSpeed);
+    }
+
+    public void off(){
+        motor.setPower(0);
+    }
+
+    public void out(){
+        motor.setPower(-motorSpeed);
+    }
+
 }

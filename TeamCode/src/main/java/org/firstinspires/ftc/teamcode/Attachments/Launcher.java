@@ -1,54 +1,93 @@
 package org.firstinspires.ftc.teamcode.Attachments;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.teamcode.Components.actuators.Motor;
 import org.firstinspires.ftc.teamcode.Components.actuators.Servo;
 import org.firstinspires.ftc.teamcode.Utilities.EggTimer;
+import org.firstinspires.ftc.teamcode.Utilities.Globals;
 import org.firstinspires.ftc.teamcode.Utilities.Serialiser;
 
 public class Launcher {
-    Motor centralMotor;
+    public static Boolean DEBUG_THREADING = true;
+    public static String DEBUG_TAG = "Launcher";
+    static int failed_launches_called = 0;
+    Serialiser launchTask = null;
+
+    Motor cMotor0;
+    Motor cMotor1;
     Servo flickServo;
 
     double flickOpenPos, flickClosePos;
-    double motorSpeed;
+    double motorSpeed = 20;
 
     public Launcher(){
-        centralMotor = new Motor("launchMotor");
-        flickClosePos = 0;
-        flickOpenPos = 0;
+        cMotor0 = new Motor("launchMotor0");
+        cMotor1 = new Motor("launchMotor1");
+        flickServo = new Servo("launchServo");
+        flickOpenPos = 0.87; //trial and error
+
+        flickClosePos = 0.6; //trial and error
+        flickServo.setPosition(flickClosePos);
     }
 
-    public void motorOn(){centralMotor.setVelocity(motorSpeed);}
+    public void motorOn(){
+        cMotor0.setVelocity(-motorSpeed);
+        cMotor1.setVelocity(motorSpeed);
+    }
 
-    public void motorOff(){centralMotor.setVelocity(0);}
+    public void motorOff(){
+        cMotor0.setVelocity(0);
+        cMotor1.setVelocity(0);
+    }
 
-    public void launchDisk(){
+    public boolean motorsAtSpeed(){
+        boolean result = cMotor0.getVelocity() >motorSpeed;
+        Log.d(DEBUG_TAG, "Motor speeds are as follows: " + cMotor0.getVelocity() + " " + cMotor1.getVelocity());
+        Log.d(DEBUG_TAG, "Motor should be at speed " + motorSpeed + " returning " + result);
+        return result;
+    }
+
+    public synchronized void launchDisk(){
         // Wait until motor is at speed, and then launch the disk.
-        if (centralMotor.getVelocity() < motorSpeed){
+        if (!motorsAtSpeed()){
+            failed_launches_called += 1;
             motorOn();
-            new Serialiser() {
+            launchTask = new Serialiser("Launch " + failed_launches_called) {
                 @Override
                 public boolean condition() {
-                    return centralMotor.getVelocity() < motorSpeed;
+                    return motorsAtSpeed();
                 }
                 @Override
                 public void onConditionMet() {
                     launchDisk();
+                    launchTask = null;
                 }
-            }.start();
+            };
+            launchTask.start();
+            if (DEBUG_THREADING){
+                Log.i(DEBUG_TAG, "Failed to launch disk, motor not at speed. Launches failed: " + failed_launches_called);
+                Log.i(DEBUG_TAG, "Seraliser State: " + launchTask.getDebugInfo());
+            }
             return;
         }
+        launchTask = null;
         flickServo.setPosition(flickOpenPos);
         new EggTimer(){
             @Override
             public long getLen() {
                 return 500;
-            }
-
+            } //ms
             @Override
             public void onComplete() {
                 flickServo.setPosition(flickClosePos);
             }
         }.start();
+    }
+    public boolean getLaunchTaskState(){
+        return launchTask != null;
+    }
+    public void cancelLaunchDisk(){
+        if (launchTask != null) launchTask.interrupt();
     }
 }

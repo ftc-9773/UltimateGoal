@@ -22,9 +22,11 @@ public class ActuatorManager implements Runnable {
     @Override
     public void run() {
         while(!Globals.opMode.isStopRequested()){
-            for (BaseActuator a : ActuatorStorage.actuators){
-                if (a.hasChanged()){
-                    a.update();
+            synchronized (this){
+                for (BaseActuator a : ActuatorStorage.actuators){
+                    if (a.hasChanged()){
+                            a.update();
+                    }
                 }
             }
         }

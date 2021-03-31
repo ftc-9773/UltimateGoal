@@ -8,7 +8,9 @@ import java.util.ArrayList;
 public class ActuatorStorage {
     static ArrayList<BaseActuator> actuators = new ArrayList<>();
 
-    static void add_actuator(BaseActuator a){
+    static synchronized void add_actuator(BaseActuator a){
         actuators.add(a);
     }
+
+    static synchronized void remove_actuator(BaseActuator a){ actuators.remove(a); }
 }
