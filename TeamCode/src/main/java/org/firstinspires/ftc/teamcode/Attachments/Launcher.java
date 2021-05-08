@@ -27,7 +27,7 @@ public class Launcher {
     boolean motorsOn = false;
     public enum MODE {POLE, BASKET}
     public MODE mode = MODE.BASKET;
-    PIDController velPID;
+    public PIDController velPID;
     public Motor cMotor0;
     public Motor cMotor1;
     public Encoder encoder;
@@ -40,7 +40,7 @@ public class Launcher {
     double lastVel = -1, Vel;
     double lastTime = System.currentTimeMillis();
 
-    double motorPower = 0, motorBasePower;
+    public double motorPower = 0, motorBasePower;
 
     double baseMotorPower, basePolePower;
     double flickOpenPos, flickClosePos;
@@ -61,7 +61,7 @@ public class Launcher {
         motorWindow = reader.getDouble("motorWindow", 0.2);
         baseMotorPower = reader.getDouble("launchMotorBasePower", 0.77);
         basePolePower = reader.getDouble("launchMotorBasePower", 0.75);
-        motorBasePower = reader.getDouble("launchMotorBasePower", 0.77);
+        motorBasePower = reader.getDouble("launchMotorBasePower", 0.75);
         velPID = new PIDController(reader.getDouble("lkp"), reader.getDouble("lki"), reader.getDouble("lkd"));
         velPID.name = "VELPID";
         targetSpeed = motorSpeed;
@@ -88,9 +88,14 @@ public class Launcher {
                     if (!(timer.timeElapsed() < minCycleTime)){
                         double vel = encoder.getVel();
                         double correction = velPID.getPIDCorrection(targetSpeed, vel);
+                        if (correction > 0.15){
+                            correction = 0.15;
+                        } else if (correction < -0.15){
+                            correction = -0.15;
+                        }
                         Log.d("VelPID", "," + otherTimer.timeElapsed() + "," + velPID.prevError + "," + velPID.derivative + "," + isLaunch);
                         if (isLaunch == 1) isLaunch = 0;
-                        Log.d("VelocityController", "made correction " + correction);
+                        Log.d("VelocityController", "Base power: " + motorBasePower + " made correction " + correction);
                         motorPower = motorBasePower + correction;
                         if (motorPower > 1) motorPower = 1;
                         if (motorPower < -1) motorPower = -1;
@@ -106,6 +111,7 @@ public class Launcher {
                     cMotor1.setPower(0);
                     motorPower = 0;
                     velocityController = null;
+                    Log.d("VelocityController", "Stopped");
                 }
             };
             velocityController.start();

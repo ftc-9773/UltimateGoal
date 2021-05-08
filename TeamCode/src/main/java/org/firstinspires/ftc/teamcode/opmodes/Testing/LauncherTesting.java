@@ -17,7 +17,7 @@ public class LauncherTesting extends BasicOpMode {
     @Override
     public void initialise() {
         super.initialise();
-         //launcher = new Launcher();
+        launcher = new Launcher();
 
     }
 
@@ -29,7 +29,7 @@ public class LauncherTesting extends BasicOpMode {
         Button b = new Button();
         Button g1x = new Button();
         Button g1y = new Button();
-        DcMotor motor1 = hardwareMap.get(DcMotor.class, "launchMotor0"), motor2 = hardwareMap.get(DcMotor.class, "launchMotor1");
+        Motor motor1 = new Motor("launchMotor0"), motor2 = new Motor( "launchMotor1");
         Button a = new Button();
         Button rightBumper = new Button();
         double motorPowers = 0.1;
@@ -57,11 +57,11 @@ public class LauncherTesting extends BasicOpMode {
             }
             rightBumper.recordNewValue(gamepad1.right_bumper);
             if (rightBumper.isOn()){
-                motor1.setPower(0);
-                motor2.setPower(0);
+                launcher.cMotor0.setPower(0);
+                launcher.cMotor1.setPower(0);
             } else {
-                motor1.setPower(motorPowers);
-                motor2.setPower(-motorPowers);
+                launcher.cMotor0.setPower(motorPowers);
+                launcher.cMotor1.setPower(-motorPowers);
             }
 
             telemetry.addLine(rotate());

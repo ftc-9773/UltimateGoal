@@ -41,7 +41,7 @@ public abstract class BasicOpMode extends LinearOpMode {
         write("Added Actuators"+ actuators.toString() + ", starting manager");
         Log.d("BasicOpMode", "Added Actuators"+ actuators.toString() + ", starting manager");
         Log.d("BasicOpMode", "Starting manager");
-        manager.start();
+        //manager.start();
         write("waiting for start");
         //Put other initialisation code here.
         waitForStart();
