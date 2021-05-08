@@ -10,7 +10,7 @@
   "launchPoleSpeed" : 20,
   "motorWindow" : 20,
 
-  "lkp" : 0.002,
+  "lkp" : 0.003,
   "lki" : 0.00,
   "lkd" : 0.004,
 
