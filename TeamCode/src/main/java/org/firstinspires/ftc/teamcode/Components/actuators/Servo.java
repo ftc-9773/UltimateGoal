@@ -4,7 +4,7 @@ import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
 
-public class Servo extends BaseActuator{
+public class Servo {
     double position;
     double last_pos;
     String TAG;
@@ -23,7 +23,7 @@ public class Servo extends BaseActuator{
         update();
     }
 
-    @Override
+
     public void update() {
         if (position != last_pos){
             Log.d(TAG, "set new position " + position);
@@ -32,8 +32,8 @@ public class Servo extends BaseActuator{
         last_pos = position;
     }
 
-    @Override
-    public boolean hasChanged() { return true; }
+
+    public boolean hasChanged() { return position == last_pos; }
 
     public String toString(){
         return TAG;

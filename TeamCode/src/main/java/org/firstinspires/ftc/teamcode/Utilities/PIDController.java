@@ -11,17 +11,18 @@ public class PIDController {
     private double KI;
     private double KD;
     private double integral;
-    private double derivative;
+    public double derivative;
     public double prevError;
     private double output;
     private long lastTime;
     private long deltaTime;
     private boolean firstRun = true;
+    public String name = "PID";
 
     private boolean useExponential;
 
     private static int maxDeltaTime = 800;
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     public PIDController( double KP, double KI, double KD) {
         this.KP = KP;
@@ -35,22 +36,27 @@ public class PIDController {
         }
     }
 
+    public double getPIDCorrection(double error, double derivative, double decay){
+        return 0;
+    }
+
     public double getPIDCorrection(double error) {
         // calculate helper variables
         deltaTime = System.currentTimeMillis() - lastTime;
-
         // If it is the first run, just return proportional error as i and d cannot be cauculated yet
+        Log.d("P.I.D", "Got PID Correction. First run: " + firstRun + " delta time: " + deltaTime);
         if (firstRun || deltaTime > maxDeltaTime) {
             firstRun = false;
-            return error * KP;
+            output =  error * KP;
         } else {
             // Calculate I and D errors
-            integral = integral + (error * deltaTime);
+            integral = 0.9 * integral + (error * deltaTime);
             derivative = (error - prevError) / deltaTime;
             if (DEBUG){
-                Log.i("PID:", "I : "+ integral);
-                Log.i("PID:", "D : "+ derivative );
+                //Log.i("PID-", "I : "+ integral);
+                //Log.d("PID", "D : "+ derivative );
             }
+            //Log.d(name, "," + System.currentTimeMillis() + "," + error + "," + derivative);
             output = KP * error + KI * integral + KD * derivative;
         }
         // Set previous values for next time
@@ -62,7 +68,9 @@ public class PIDController {
     }
 
     public double getPIDCorrection(double target, double actual) {
-        return getPIDCorrection(target - actual);
+        double correction =  getPIDCorrection(target - actual);
+
+        return correction;
     }
     public void resetPID(){
         this.prevError = 0;

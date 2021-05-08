@@ -7,7 +7,7 @@ package org.firstinspires.ftc.teamcode.Components.actuators;
 public abstract class BaseActuator{
 
     public BaseActuator(){
-        ActuatorStorage.actuators.add(this);
+        ActuatorStorage.add_actuator(this);
     }
 
     public abstract boolean hasChanged();

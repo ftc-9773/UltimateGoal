@@ -1,0 +1,23 @@
+{
+  "hookOpenPos" : 0.2,
+  "hookClosePos" : 0.55,
+
+  "launchOpenPos" : 0.99,
+  "launchMotorBasePower" : 0.09,
+  "launchMotorBasePowerPoles" : 0.74,
+  "launchClosePos" : 0.59,
+  "launchMotorSpeed" : 400,
+  "launchPoleSpeed" : 20,
+  "motorWindow" : 50,
+
+  "lkp" : 0.01,
+  "lki" : 0.00,
+  "lkd" : 0.05,
+
+  "drivebaseXslow" : 0.2,
+  "drivebaseYslow" : 0.2,
+  "drivebaseRslow" : 0.3,
+
+  "TAG" : "FOUR"
+
+}

@@ -1,0 +1,12 @@
+drive 0 20
+waitTime 1
+drive 20 0
+waitTime 1
+drive -20 -20
+waitTime 1
+drive 0 -20
+waitTime 1
+drive -20 0
+waitTime 1
+drive 20 20
+waitTime 1

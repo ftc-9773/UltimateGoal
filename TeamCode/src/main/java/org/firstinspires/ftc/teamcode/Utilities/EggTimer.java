@@ -12,10 +12,11 @@ package org.firstinspires.ftc.teamcode.Utilities;
  *
  * All EggTimers are stopped without running onComplete() if the opmode is stopped.
  * */
-public abstract class EggTimer implements Runnable{
+public abstract class EggTimer extends Threading implements Runnable{
     long endTime;
     private Thread t;
     boolean reverse = false;
+    boolean interrupted;
 
     public EggTimer(){}
 
@@ -35,14 +36,32 @@ public abstract class EggTimer implements Runnable{
         return System.currentTimeMillis() > endTime;
     }
 
+    //Automatically stop all threads if the opmode is stopped.
+    private boolean _interruptCondition(){
+        return Globals.opMode.isStopRequested() || !Globals.opMode.opModeIsActive() || interruptCondition();
+    }
+
+    //To be overriden by subclasses if necessary
+    public boolean interruptCondition(){
+        return interrupted;
+    }
+
+    public void interrupt(){
+        interrupted = true;
+    }
+
+    public void during(){
+
+    }
+
     @Override
     public void run() {
         while (!isDone()){
-            if (Globals.opMode.isStopRequested()){
-                return; //Interrupt without finishing if opmode is stopped.
+            if (_interruptCondition()){
+                return; //Interrupt without finishing if opmode is stopped or something goes wrong.
             }
             if (reverse) onComplete();
-
+            if (!reverse) during();
         }
         if (!reverse) onComplete();
     }

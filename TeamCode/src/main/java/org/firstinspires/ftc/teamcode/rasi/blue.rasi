@@ -1,0 +1,129 @@
+intakeUp
+ZERO:closeHook
+ZERO:waitTime 0.1
+ZERO:hold
+ZERO:drive -5 53
+ZERO:waitTime 0.05
+ZERO:stopDrive
+ZERO:waitTime 0.05
+ZERO:launch
+ZERO:waitTime 0.05
+ZERO:launch
+ZERO:WaitTime 0.05
+ZERO:launch
+ZERO:waitTime 0.05
+ZERO:motorsOff
+ZERO:drive 15 30
+ZERO:waitTime 0.1
+ZERO:lowerArm
+ZERO:waitTime 1
+ZERO:openHook
+ZERO:waitTime 0.5
+ZERO:raiseArm
+ZERO:waitTime 1
+ZERO:drive -20 0
+ZERO:wait 0.1
+ZERO:drive -12 -18.5
+ZERO:waitTime 0.1
+ZERO:lowerArm
+ZERO:drive 0 -37
+ZERO:closeHook
+ZERO:waitTime 1.5
+ZERO:raiseArm
+ZERO:waitTime 1
+ZERO:drive 0 68
+ZERO:waitTime 0.1
+ZERO:drive 30 0
+ZERO:waitTime 0.1
+ZERO:lowerArm
+ZERO:waitTime 0.1
+ZERO:openHook
+ZERO:waitTime 0.5
+ZERO:raiseArm
+ZERO:waitTime 0.1
+ZERO:drive -30 0
+ZERO:drive 0 -30
+ZERO:waitTime 1
+
+
+ONE:closeHook
+ONE:waitTime 0.1
+ONE:hold
+ONE:drive 0 20
+ONE:motorsOn
+ONE:setTrackedHeading 3
+ONE:drive -7 3
+ONE:waitTime 0.4
+ONE:launch
+ONE:waitTime 0.2
+ONE:setTrackedHeading -3
+ONE:drive -8.5 0
+ONE:motorsOff
+ONE:raiseMotorPower
+ONE:waitTime 0.1
+ONE:intakeOn
+ONE:drive 0 10
+ONE:waitTime 0.1
+ONE:setTrackedHeading 0
+ONE:drive 14 10
+ONE:motorsOn
+ONE:waitTime 0.4
+ONE:launch
+ONE:waitTime 0.2
+ONE:launch
+ONE:waitTime 0.2
+ONE:launch
+ONE:waitTime 0.2
+ONE:motorsOff
+ONE:intakeOff
+ONE:drive 0 56
+ONE:waitTime 0.1
+ONE:lowerArm
+ONE:waitTime 0.7
+ONE:openHook
+ONE:waitTime 0.5
+ONE:raiseArm
+ONE:waitTime 0.5
+ONE:drive -23 0
+ONE:lowerArm
+ONE:drive 0 -86
+ONE:waitTime 0
+ONE:closeHook
+ONE:waitTime 0.5
+ONE:raiseArm
+ONE:waitTime 0.5
+ONE:drive 18 40
+ONE:rotate 180
+ONE:lowerArm
+ONE:waitTime 0.5
+ONE:openHook
+ONE:waitTime 0.5
+ONE:raiseArm
+ONE:rotate 0
+
+FOUR:closeHook
+FOUR:waitTIme 0.1
+FOUR:hold
+FOUR:drive -5 53
+FOUR:waitTime 0.05
+FOUR:stopDrive
+FOUR:waitTime 0.05
+FOUR:launch
+FOUR:launch
+FOUR:launch
+FOUR:motorsOff
+FOUR:drive 0 46
+FOUR:waitTime 0.1
+FOUR:rotate 180
+FOUR:waitTime 0.1
+FOUR:lowerArm
+FOUR:waitTime 1
+FOUR:openHook
+FOUR:waitTime 1
+FOUR:raiseArm
+FOUR:waitTime 0.1
+FOUR:drive 0 0
+FOUR:waitTime 1
+FOUR:drive 0 30
+FOUR:waitTime 1
+FOUR:rotate 0

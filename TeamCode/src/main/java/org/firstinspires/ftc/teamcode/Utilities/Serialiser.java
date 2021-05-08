@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.Utilities;
 
 import android.util.Log;
@@ -14,7 +15,7 @@ import android.util.Log;
  *
  * All Serialisers are stopped without running onComplete() if the opmode is stopped.
  * */
-public abstract class Serialiser extends Thread {
+public abstract class Serialiser extends Threading implements Runnable {
     private Thread t;
     private String name = "";
     boolean reverse = false;
@@ -26,6 +27,10 @@ public abstract class Serialiser extends Thread {
     public Serialiser(String name){
         this.name = name;
     }
+
+    public String name(){
+        return name;
+    }
     public Serialiser(boolean reverse, String name) { this.reverse = reverse; this.name = name; }
 
 
@@ -36,7 +41,7 @@ public abstract class Serialiser extends Thread {
     public void start(){
         if(t == null){
             t = new Thread(this, "Seraliser " + name);
-            t.run();
+            t.start();
             Log.d("SERIALISER " + name, "Started thread");
         }
     }
@@ -44,12 +49,13 @@ public abstract class Serialiser extends Thread {
     @Override
     public void run() {
         while (!condition()) {
-            if (interruptCondition() || interrupted){
+            if (_interruptCondition() || interrupted){
                 Log.d("SERIALISER " + name, "Interrupted");
                 return;
             }
             if (reverse) onConditionMet();
-            Log.d("SERIALISER " + name,  "condition not met");
+            if (!reverse) during();
+            //Log.d("SERIALISER " + name,  "condition not met");
         }
         Log.d("SERIALISER " + name, "condition met");
         if (!reverse) onConditionMet();
@@ -58,11 +64,20 @@ public abstract class Serialiser extends Thread {
 
     public abstract boolean condition();
 
+    public void during(){
+
+    }
+
     public abstract void onConditionMet();
 
     //Automatically stop all threads if the opmode is stopped.
+    private boolean _interruptCondition(){
+        return Globals.opMode.isStopRequested() || !Globals.opMode.opModeIsActive() || interruptCondition();
+    }
+
+    //To be overriden by subclasses if necessary
     public boolean interruptCondition(){
-        return Globals.opMode.isStopRequested() || !Globals.opMode.opModeIsActive();
+        return false;
     }
 
     public void interrupt(){
