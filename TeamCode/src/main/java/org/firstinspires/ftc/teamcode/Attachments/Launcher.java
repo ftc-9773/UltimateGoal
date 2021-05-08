@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Globals;
 import org.firstinspires.ftc.teamcode.Utilities.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.Serialiser;
 import org.firstinspires.ftc.teamcode.Utilities.Timer;
+import org.firstinspires.ftc.teamcode.Utilities.VelPIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.JsonReader;
 
 import java.sql.Time;
@@ -27,7 +28,7 @@ public class Launcher {
     boolean motorsOn = false;
     public enum MODE {POLE, BASKET}
     public MODE mode = MODE.BASKET;
-    public PIDController velPID;
+    public VelPIDController velPID;
     boolean forceLaunch = false;
     public Motor cMotor0;
     public Motor cMotor1;
@@ -63,7 +64,7 @@ public class Launcher {
         baseMotorPower = reader.getDouble("launchMotorBasePower", 0.77);
         basePolePower = reader.getDouble("launchMotorBasePower", 0.75);
         motorBasePower = reader.getDouble("launchMotorBasePower", 0.75);
-        velPID = new PIDController(reader.getDouble("lkp"), reader.getDouble("lki"), reader.getDouble("lkd"));
+        velPID = new VelPIDController(reader.getDouble("lkp"), reader.getDouble("lki"), reader.getDouble("lkd"));
         velPID.name = "VELPID";
         targetSpeed = motorSpeed;
         flickServo.setPosition(flickClosePos);

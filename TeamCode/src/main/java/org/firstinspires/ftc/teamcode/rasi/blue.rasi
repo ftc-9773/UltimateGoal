@@ -51,9 +51,9 @@ ONE:closeHook
 ONE:waitTime 0.1
 ONE:hold
 ONE:drive 0 20
-ONE:motorsOn
 ONE:setTrackedHeading 3
 ONE:drive -7 3
+ONE:motorsOn
 ONE:waitTime 0.4
 ONE:launch
 ONE:waitTime 0.2
@@ -123,8 +123,6 @@ FOUR:openHook
 FOUR:waitTime 1
 FOUR:raiseArm
 FOUR:waitTime 0.1
-FOUR:drive 0 0
-FOUR:waitTime 1
 FOUR:drive 0 30
-FOUR:waitTime 1
+FOUR:waitTime 0.1
 FOUR:rotate 0

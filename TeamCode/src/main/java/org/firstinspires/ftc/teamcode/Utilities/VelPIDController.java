@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Vikesh on 11/20/2017.
  */
 
-public class PIDController {
+public class VelPIDController {
     public double KP;
     public double KI;
     public double KD;
@@ -28,7 +28,7 @@ public class PIDController {
     private static int maxDeltaTime = 800;
     private static boolean DEBUG = true;
 
-    public PIDController( double KP, double KI, double KD) {
+    public VelPIDController(double KP, double KI, double KD) {
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
@@ -55,9 +55,15 @@ public class PIDController {
             output =  error * KP;
         } else if (deltaTime == 0){
             output = error * KP;
-        } else {
+        } else if (prevError != error){
             // Calculate I and D errors
             integral = 0.9 * integral + (error * deltaTime);
+            errorQueue.add(error);
+            if (errorQueue.size() > 5) {
+                errorQueue.remove(0);
+            }
+            timeQueue.add(deltaTime);
+
             derivative = (error - prevError) / deltaTime;
 
             if (DEBUG){
@@ -69,11 +75,17 @@ public class PIDController {
             if (Double.isNaN(output)) {
                 output = KP * error + KI * integral;
             }
+        } else {
+            output = error * KP + derivative * KD + integral * KP;
         }
         // Set previous values for next time
 
-        prevError = error;
-        lastTime = System.currentTimeMillis();
+        if (error > 700 || error < -700) {
+            output = prevError * KP;
+        } else {
+            lastTime = System.currentTimeMillis();
+            prevError = error;
+        }
 
         return output;
     }
