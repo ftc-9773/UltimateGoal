@@ -49,7 +49,7 @@ public class Hook {
             }
             @Override
             public long getLen() {
-                return 300;
+                return 600;
             }
         };
         activeTask.start();
@@ -103,7 +103,7 @@ return activeTask == null;
 
             @Override
             public void during() {
-                internalMotor.setPower(-0.3);
+                internalMotor.setPower(-0.4);
             }
 
             @Override

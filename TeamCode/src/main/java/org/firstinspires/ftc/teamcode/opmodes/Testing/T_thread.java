@@ -21,7 +21,7 @@ public class T_thread extends BasicOpMode {
         while (opModeIsActive()){
 //            telemetry.addLine("E:" + encoder.getPos());
 //            telemetry.addLine("V:" + encoder.getVel());
-            telemetry.addLine("MV: " + motor.getVelocity());
+//            telemetry.addLine("MV: " + motor.getVelocity());
             telemetry.update();
             if (gamepad1.left_stick_y > 0.1 || gamepad1.left_stick_y < -0.1) motor.setPower(gamepad1.left_stick_y);
             else motor.setPower(0);

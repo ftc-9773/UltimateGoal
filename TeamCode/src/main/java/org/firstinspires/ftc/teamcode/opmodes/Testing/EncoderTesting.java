@@ -24,7 +24,7 @@ public class EncoderTesting extends BasicOpMode {
                 motor.setPower(0);
                 otherMotor.setPower(0);
             }
-            telemetry.addLine("MV: " + motor.getVelocity());
+//            telemetry.addLine("MV: " + motor.getVelocity());
             telemetry.addLine("MP:" + motor.getPosition());
             telemetry.addLine("V: " + encoder.getVel());
             telemetry.addLine("P: " + encoder.getPos());

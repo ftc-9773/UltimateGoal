@@ -20,7 +20,7 @@ public class Motor extends BaseActuator {
     double velocity = 0;
 
     DcMotor internal_motor;
-    Encoder internal_encoder;
+    //Encoder internal_encoder;
     String TAG = "DCMOTOR ";
 
 
@@ -29,21 +29,21 @@ public class Motor extends BaseActuator {
         super();
         internal_motor = Globals.hardwareMap.get(DcMotor.class, name);
         setZeroPowerMode(DcMotor.ZeroPowerBehavior.FLOAT); //default zero power behavior should probably be this.
-        internal_encoder = new Encoder(name);
-        ActuatorStorage.remove_actuator(internal_encoder);
+        //internal_encoder = new Encoder(name);
+        //ActuatorStorage.remove_actuator(internal_encoder);
         TAG = TAG + name + " PORT " + internal_motor.getPortNumber();
         internal_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //Needs to be this to use setpower without encoder
     }
 
     public void setInternal_encoder(Encoder encoder){
         ActuatorStorage.remove_actuator(encoder);
-        internal_encoder = encoder;
+        //internal_encoder = encoder;
     }
     //If not being used for some reason
 
-    public void resetEncoder() {
-        internal_encoder.reset();
-    }
+    //public void resetEncoder() {
+        //internal_encoder.reset();
+    //}
 
     public void setZeroPowerMode(DcMotor.ZeroPowerBehavior mode){
         internal_motor.setZeroPowerBehavior(mode);
@@ -61,9 +61,9 @@ public class Motor extends BaseActuator {
         return true;
     }
 
-    public double getVelocity(){
-        return internal_encoder.getVel();
-    }
+//    public double getVelocity(){
+//        return internal_encoder.getVel();
+//    }
 
     //WRITE value to hardware
     @Override
@@ -71,9 +71,9 @@ public class Motor extends BaseActuator {
 //        if (internal_motor != null) { //if somehow the actuator thread attempts to call this during initialisaiton.
 //            internal_motor.setPower(power);
 //        }
-        if (internal_encoder != null){
-            internal_encoder.update();
-        }
+//        if (internal_encoder != null){
+//            internal_encoder.update();
+//        }
     }
 
     public String toString(){
@@ -81,7 +81,7 @@ public class Motor extends BaseActuator {
     }
 
     public long getPosition(){
-        return internal_encoder.getPos();
+        return internal_motor.getCurrentPosition();
     }
 
     public ArrayList<String> getdebuginfo(){

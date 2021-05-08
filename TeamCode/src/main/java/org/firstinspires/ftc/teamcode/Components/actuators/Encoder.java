@@ -18,12 +18,12 @@ public class Encoder extends BaseActuator{
     private double vel;
     public ArrayList<Long> posQueue = new ArrayList<>();
     public ArrayList<Long> timequeue = new ArrayList<>();
-    //public int smoothing = 10;
+    public int smoothing = 8;
     private long last_pos;
     private long last_time;
     private long consecutive_errors = 0;
     private static final int COUNTS_PER_REVOLUTION = 8192;
-    long minDT = 5;
+    long minDT = 3;
 
 
     public Encoder(String name){
@@ -59,11 +59,18 @@ public class Encoder extends BaseActuator{
             long time = System.currentTimeMillis();
             if (time - last_time > minDT) {
                 pos = encoder.getCurrentPosition();
-                //timequeue.add(time);
-                //if (timequeue.size() > smoothing) timequeue.remove(0);
-                //posQueue.add(pos);
-                //if (posQueue.size() > smoothing) posQueue.remove(0);
-                vel = ((double) (pos - last_pos)) / (time / 1000. - last_time/ 1000.) / COUNTS_PER_REVOLUTION * Math.PI * 2; //rad/s
+                timequeue.add(time);
+                if (timequeue.size() > smoothing) timequeue.remove(0);
+                posQueue.add(pos);
+                if (posQueue.size() > smoothing) posQueue.remove(0);
+                //vel = ((double) (pos - last_pos)) / (time / 1000. - last_time/ 1000.) / COUNTS_PER_REVOLUTION * Math.PI * 2; //rad/s
+                vel = 0;
+                double dt = 0;
+                for (int i=0; i < posQueue.size() - 1; i++){
+                    vel += posQueue.get(i + 1) - posQueue.get(i);
+                    dt += (timequeue.get(i + 1) - timequeue.get(i) )/ 1000.;
+                }
+                vel = vel / dt / COUNTS_PER_REVOLUTION * Math.PI * 2;
                 //vel = (double) (pos - last_pos) / (time - last_time) * 1000;
                 //Log.d("Encoder", "Change in ticks " + (pos - last_pos) + "Change in time: " + (time - last_time));
                 last_pos = pos;

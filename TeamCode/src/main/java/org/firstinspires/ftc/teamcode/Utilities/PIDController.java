@@ -44,6 +44,7 @@ public class PIDController {
         return 0;
     }
 
+
     public double getPIDCorrection(double error) {
         // calculate helper variables
         deltaTime = System.currentTimeMillis() - lastTime;
@@ -52,7 +53,9 @@ public class PIDController {
         if (firstRun || deltaTime > maxDeltaTime) {
             firstRun = false;
             output =  error * KP;
-        } else {
+        } else if (deltaTime == 0){
+            output = error * KP;
+        } else if (prevError != error){
             // Calculate I and D errors
             integral = 0.9 * integral + (error * deltaTime);
             errorQueue.add(error);
@@ -69,14 +72,20 @@ public class PIDController {
             }
             //Log.d(name, "," + System.currentTimeMillis() + "," + error + "," + derivative);
             output = KP * error + KI * integral + KD * derivative;
-            if (derivative == Double.NaN) {
+            if (Double.isNaN(output)) {
                 output = KP * error + KI * integral;
             }
+        } else {
+            output = error * KP + derivative * KD + integral * KP;
         }
         // Set previous values for next time
 
-        prevError = error;
-        lastTime = System.currentTimeMillis();
+        if (error > 700 || error < -700) {
+            output = prevError * KP;
+        } else {
+            lastTime = System.currentTimeMillis();
+            prevError = error;
+        }
 
         return output;
     }

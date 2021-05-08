@@ -2,10 +2,11 @@ intakeUp
 ZERO:closeHook
 ZERO:waitTime 0.1
 ZERO:hold
-ZERO:drive -5 53
+ZERO:drive -5 52
 ZERO:waitTime 0.05
 ZERO:stopDrive
-ZERO:waitTime 0.05
+ZERO:motorsOn
+ZERO:waitTime 0.3
 ZERO:launch
 ZERO:waitTime 0.05
 ZERO:launch
@@ -23,7 +24,7 @@ ZERO:raiseArm
 ZERO:waitTime 1
 ZERO:drive -20 0
 ZERO:wait 0.1
-ZERO:drive -12 -18.5
+ZERO:drive -13 -18.5
 ZERO:waitTime 0.1
 ZERO:lowerArm
 ZERO:drive 0 -37

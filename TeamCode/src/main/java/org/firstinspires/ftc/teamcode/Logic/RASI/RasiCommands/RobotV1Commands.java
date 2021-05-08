@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Attachments.Launcher;
 import org.firstinspires.ftc.teamcode.Logic.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utilities.EggTimer;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
+import org.firstinspires.ftc.teamcode.Utilities.Timer;
 
 import static java.lang.Math.*;
 
@@ -53,8 +54,11 @@ public class RobotV1Commands extends RasiCommands{
     public void Launch(){
         Globals.launcher.launchDisk();
         waitTime(0.01);
+        Timer timer = new Timer(3000);
         while (Globals.launcher.getLaunchTaskState() && Globals.opMode.opModeIsActive()){
-
+            if (timer.timeElapsed() > 3000){
+                Globals.launcher.forceLaunch();
+            }
         }
     }
     public void motorsOn(){

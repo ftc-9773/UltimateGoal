@@ -28,6 +28,7 @@ public class Launcher {
     public enum MODE {POLE, BASKET}
     public MODE mode = MODE.BASKET;
     public PIDController velPID;
+    boolean forceLaunch = false;
     public Motor cMotor0;
     public Motor cMotor1;
     public Encoder encoder;
@@ -77,6 +78,7 @@ public class Launcher {
         if (velocityController == null){
             otherTimer.reset();
             timer.reset();
+            velPID.resetPID();
             Log.d(DEBUG_TAG, "velocityController didn't exist");
             velocityController = new Serialiser() {
                 @Override
@@ -92,6 +94,10 @@ public class Launcher {
                             correction = 0.15;
                         } else if (correction < -0.15){
                             correction = -0.15;
+                        }
+                        if (Double.isNaN(correction)){
+                            velPID.resetPID();
+                            return;
                         }
                         Log.d("VelPID", "," + otherTimer.timeElapsed() + "," + velPID.prevError + "," + velPID.derivative + "," + isLaunch);
                         if (isLaunch == 1) isLaunch = 0;
@@ -121,6 +127,10 @@ public class Launcher {
 
     public double getMotorSpeed(){
         return encoder.getVel();
+    }
+
+    public void forceLaunch(){
+        forceLaunch = true;
     }
 
     public void setMode(MODE mode){
@@ -174,11 +184,12 @@ public class Launcher {
         launchTask = new Serialiser("Launch " + failed_launches_called) {
             @Override
             public boolean condition() {
-                    return motorsAtSpeed();
+                    return motorsAtSpeed() || forceLaunch;
                 }
                 @Override
                 public void onConditionMet() {
                     Log.d(DEBUG_TAG, "Launching disk at speed " + encoder.getVel());
+                    forceLaunch = false;
                     isLaunch = 1;
                     flick();
                 }

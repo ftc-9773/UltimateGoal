@@ -3,12 +3,12 @@
   "hookClosePos" : 0.55,
 
   "launchOpenPos" : 0.99,
-  "launchMotorBasePower" : 0.765,
-  "launchMotorBasePowerPoles" : 0.74,
+  "launchMotorBasePower" : 0.77,
+  "launchMotorBasePowerPoles" : 0.765,
   "launchClosePos" : 0.59,
-  "launchMotorSpeed" : 400,
-  "launchPoleSpeed" : 20,
-  "motorWindow" : 20,
+  "launchMotorSpeed" : 420,
+  "launchPoleSpeed" : 400,
+  "motorWindow" : 10,
 
   "lkp" : 0.003,
   "lki" : 0.00,
