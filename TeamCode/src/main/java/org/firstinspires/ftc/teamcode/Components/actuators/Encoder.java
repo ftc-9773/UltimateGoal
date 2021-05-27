@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
+import org.firstinspires.ftc.teamcode.Utilities.Timer;
 
 import java.util.ArrayList;
 import java.util.function.ToIntFunction;
@@ -18,19 +19,24 @@ public class Encoder extends BaseActuator{
     private double vel;
     public ArrayList<Long> posQueue = new ArrayList<>();
     public ArrayList<Long> timequeue = new ArrayList<>();
-    public int smoothing = 8;
+    public ArrayList<Double> velTracker = new ArrayList<>();
+    Boolean log = true;
+    public int smoothing = 5;
     private long last_pos;
     private long last_time;
+    private long alt_last_time;
+    private double alt_v;
     private long consecutive_errors = 0;
-    private static final int COUNTS_PER_REVOLUTION = 8192;
-    long minDT = 3;
-
+    public static final int COUNTS_PER_REVOLUTION = 28;
+    long minDT = 5;
+    Timer timerUtil = new Timer();
 
     public Encoder(String name){
         encoder = Globals.hardwareMap.get(DcMotorEx.class, name);
         TAG = TAG + name + " PORT " + encoder.getPortNumber();
-        //encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         last_time = System.currentTimeMillis();
+        alt_last_time = System.currentTimeMillis();
         last_pos = encoder.getCurrentPosition();
         reset();
     }
@@ -46,19 +52,27 @@ public class Encoder extends BaseActuator{
 
     @Override
     public void update(){
+        long time;
+        long alt_time;
         if (encoder != null){
             try {
-                pos = encoder.getCurrentPosition();
+                timerUtil.reset();
+                time = System.currentTimeMillis();
+                if (log)Log.d(TAG, "Time Elapsed:" + timerUtil.timeElapsed());
+                timerUtil.reset();
+                if (log)pos = encoder.getCurrentPosition();
+                alt_time = System.currentTimeMillis();
+                Log.d(TAG, "getTime Elapsed:" + timerUtil.timeElapsed());
                 consecutive_errors = 0;
             } catch (RuntimeException e) {
                 consecutive_errors ++;
+                time = System.currentTimeMillis();
                 Log.d("ASSERTIONERROR", "caught error " + consecutive_errors, e);
                 return;
             }
 
-            long time = System.currentTimeMillis();
+
             if (time - last_time > minDT) {
-                pos = encoder.getCurrentPosition();
                 timequeue.add(time);
                 if (timequeue.size() > smoothing) timequeue.remove(0);
                 posQueue.add(pos);
@@ -66,26 +80,46 @@ public class Encoder extends BaseActuator{
                 //vel = ((double) (pos - last_pos)) / (time / 1000. - last_time/ 1000.) / COUNTS_PER_REVOLUTION * Math.PI * 2; //rad/s
                 vel = 0;
                 double dt = 0;
-                for (int i=0; i < posQueue.size() - 1; i++){
-                    vel += posQueue.get(i + 1) - posQueue.get(i);
-                    dt += (timequeue.get(i + 1) - timequeue.get(i) )/ 1000.;
+                if (posQueue.size() > 1){
+                    vel = posQueue.get(posQueue.size() - 1) - posQueue.get(0);
+                } else {
+                    vel = posQueue.get(0) - last_pos;
                 }
+                if (timequeue.size() != 1) {
+                    dt  = (timequeue.get(timequeue.size() - 1) - timequeue.get(0) )/ 1000.;
+                } else {
+                    dt = (timequeue.get(0) - last_time) / 1000.;
+                }
+
                 vel = vel / dt / COUNTS_PER_REVOLUTION * Math.PI * 2;
+                velTracker.add(vel);
+                if (velTracker.size() > 2){
+                    velTracker.remove(0);
+                }
+                if ((vel > 70 + velTracker.get(0) || vel < velTracker.get(0) - 70) && Math.abs(vel) > 100){
+                    return;
+                }
+                alt_v = vel / (alt_time - alt_last_time) / COUNTS_PER_REVOLUTION * Math.PI * 2 * 1000;
                 //vel = (double) (pos - last_pos) / (time - last_time) * 1000;
                 //Log.d("Encoder", "Change in ticks " + (pos - last_pos) + "Change in time: " + (time - last_time));
+
                 last_pos = pos;
                 last_time = time;
+                alt_last_time = alt_time;
 
-                if (-vel < -1000000) {
+                if (-vel < -1000000 ) {
                     Log.d("AHHH", "lt " + last_time + " time: " + time + " vel " + vel + " lp " + last_pos + " pos " + pos);
                 }
+            }
+            if (log){
+                Log.d(TAG, "," + time + "," + pos + "," + vel + "," + alt_v);
             }
         }
     }
 
     //Radians / s
     public double getVel(){
-        update();
+        //update();
         return -vel;
     }
 

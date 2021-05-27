@@ -77,5 +77,6 @@ public abstract class BasicVisionOpMode extends BasicFullOpMode {
             telemetry.addLine(rotate() + "Vision reading: " + number);
             telemetry.update();
         }
+        webcam.closeCameraDevice();
     }
 }

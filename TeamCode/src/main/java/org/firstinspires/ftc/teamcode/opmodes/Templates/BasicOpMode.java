@@ -33,7 +33,6 @@ public abstract class BasicOpMode extends LinearOpMode {
         initialise();
         write("Initialised");
         Log.d("BasicOpMode", "Created Actuator Manager");
-        waitTime(1000);
         write("Adding Actuators");
         Log.d("BasicOpMode", "Adding actuators");
         ArrayList<BaseActuator> actuators = ActuatorStorage.get_all_actuators();

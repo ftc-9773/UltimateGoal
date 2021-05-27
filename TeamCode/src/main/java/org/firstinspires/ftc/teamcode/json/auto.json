@@ -1,18 +1,18 @@
 {
-  "hkp" : 1,
+  "hkp" : 1.1,
   "hkd" : 1,
   "hki" : 0,
 
-  "rkp" : 0.3,
+  "rkp" : 0.4,
   "rkd" : 0.4,
   "rki" : 0.0,
 
   "rotExitSpeed" : 0.1,
-  "rotTol" : 0.043633231,
-  "rotMinPow" : 0.05,
+  "rotTol" : 0.06,
+  "rotMinPow" : 0.2,
   "maxRotPow" : 0.5,
 
-  "dkp" : 0.07,
-  "dki" : 0,
-  "dkd" : 1.5
+  "dkp" : 0.08,
+  "dki" : 0.0,
+  "dkd" : 1.0
 }

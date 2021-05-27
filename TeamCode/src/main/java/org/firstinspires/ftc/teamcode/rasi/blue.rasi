@@ -2,11 +2,11 @@ intakeUp
 ZERO:closeHook
 ZERO:waitTime 0.1
 ZERO:hold
-ZERO:drive -5 52
+ZERO:drive -8 49
 ZERO:waitTime 0.05
 ZERO:stopDrive
 ZERO:motorsOn
-ZERO:waitTime 0.3
+ZERO:waitTime 1
 ZERO:launch
 ZERO:waitTime 0.05
 ZERO:launch
@@ -50,29 +50,28 @@ ZERO:waitTime 1
 ONE:closeHook
 ONE:waitTime 0.1
 ONE:hold
-ONE:drive 0 20
-ONE:setTrackedHeading 3
-ONE:drive -7 3
-ONE:motorsOn
-ONE:waitTime 0.4
-ONE:launch
-ONE:waitTime 0.2
-ONE:setTrackedHeading -3
-ONE:drive -8.5 0
-ONE:motorsOff
-ONE:raiseMotorPower
+ONE:drive 0 22
 ONE:waitTime 0.1
+ONE:drive -25 0
+ONE:motorsOn
+ONE:lowerMotorSpeed
+ONE:waitTime 0.5
+ONE:launch
+ONE:waitTime 0.5
+ONE:raiseMotorSpeed
 ONE:intakeOn
-ONE:drive 0 10
+ONE:drive 0 9.5
 ONE:waitTime 0.1
-ONE:setTrackedHeading 0
-ONE:drive 14 10
+ONE:drive 10 0
+ONE:motorsOff
+ONE:waitTime 0.1
+ONE:drive 10 6
 ONE:motorsOn
-ONE:waitTime 0.4
+ONE:waitTime 0.5
 ONE:launch
-ONE:waitTime 0.2
+ONE:waitTime 0.5
 ONE:launch
-ONE:waitTime 0.2
+ONE:waitTime 0.5
 ONE:launch
 ONE:waitTime 0.2
 ONE:motorsOff
@@ -85,10 +84,10 @@ ONE:openHook
 ONE:waitTime 0.5
 ONE:raiseArm
 ONE:waitTime 0.5
-ONE:drive -23 0
+ONE:drive -20 0
 ONE:lowerArm
-ONE:drive 0 -86
-ONE:waitTime 0
+ONE:drive 2 -84
+ONE:waitTime 0.3
 ONE:closeHook
 ONE:waitTime 0.5
 ONE:raiseArm

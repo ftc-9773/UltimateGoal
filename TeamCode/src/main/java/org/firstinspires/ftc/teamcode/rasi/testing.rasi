@@ -1,3 +1,9 @@
-
-lowerArm
+drive 10 0
+waitTime 1
+setTrackedHeading 20
+drive 10 0
+waitTime 1
+setTrackedHeading 0
+drive 10 0
+waitTime 1
 waitTime 4

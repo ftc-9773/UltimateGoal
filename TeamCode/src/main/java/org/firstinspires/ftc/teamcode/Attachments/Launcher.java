@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Utilities.json.JsonReader;
 import java.sql.Time;
 
 import static org.firstinspires.ftc.teamcode.Utilities.Globals.DEBUG_LAUNCHER;
+import static org.firstinspires.ftc.teamcode.Utilities.Globals.launcher;
 
 public class Launcher {
     public static String DEBUG_TAG = "Launcher";
@@ -33,12 +34,15 @@ public class Launcher {
     public Motor cMotor0;
     public Motor cMotor1;
     public Encoder encoder;
+    public Encoder otherEncoder;
+    boolean waitATinyBit = false;
 
     int isLaunch = 0;
     Servo flickServo;
     Timer timer = new Timer();
     Timer otherTimer = new Timer();
 
+    double realVelocityThisTime;
     double lastVel = -1, Vel;
     double lastTime = System.currentTimeMillis();
 
@@ -52,8 +56,10 @@ public class Launcher {
     public Launcher(){
         cMotor0 = new Motor("launchMotor0");
         cMotor1 = new Motor("launchMotor1");
-        encoder = new Encoder("launchMotor0");
-        flickServo = new Servo("launchServo");
+
+        encoder = new Encoder("launchMotor1");
+        //otherEncoder = new Encoder("launchMotor0");
+        flickServo = new Servo("lServo");
 
         JsonReader reader = new JsonReader("componentJson");
         flickOpenPos = reader.getDouble("launchOpenPos",0.60); //trial and error
@@ -68,6 +74,9 @@ public class Launcher {
         velPID.name = "VELPID";
         targetSpeed = motorSpeed;
         flickServo.setPosition(flickClosePos);
+        Log.d(DEBUG_TAG, "PIDF C: " + cMotor0.getPIDFC());
+        cMotor0._setInternalPID(10, 3, 1);
+        cMotor1._setInternalPID(10, 3, 1);
     }
 
 
@@ -76,6 +85,8 @@ public class Launcher {
         motorsOn = true;
         Log.d(DEBUG_TAG, "Turning on motors");
         final double minCycleTime = 10;
+        //cMotor0.setVelocity(targetSpeed);
+        //cMotor1.setVelocity(-targetSpeed);
         if (velocityController == null){
             otherTimer.reset();
             timer.reset();
@@ -89,18 +100,18 @@ public class Launcher {
                 @Override
                 public void during(){
                     if (!(timer.timeElapsed() < minCycleTime)){
-                        double vel = encoder.getVel();
+                        double vel = cMotor0.getVelocity();
                         double correction = velPID.getPIDCorrection(targetSpeed, vel);
-                        if (correction > 0.15){
-                            correction = 0.15;
-                        } else if (correction < -0.15){
-                            correction = -0.15;
-                        }
+//                        if (correction > 0.15){
+//                            correction = 0.15;
+//                        } else if (correction < -0.15){
+//                            correction = -0.15;
+//                        }
                         if (Double.isNaN(correction)){
                             velPID.resetPID();
                             return;
                         }
-                        Log.d("VelPID", "," + otherTimer.timeElapsed() + "," + velPID.prevError + "," + velPID.derivative + "," + isLaunch);
+                        Log.d("VelPID", "," + otherTimer.timeElapsed() + "," + velPID.prevError + "," + velPID.derivative + "," + isLaunch + "," + correction);
                         if (isLaunch == 1) isLaunch = 0;
                         Log.d("VelocityController", "Base power: " + motorBasePower + " made correction " + correction);
                         motorPower = motorBasePower + correction;
@@ -108,8 +119,11 @@ public class Launcher {
                         if (motorPower < -1) motorPower = -1;
                         cMotor0.setPower(motorPower);
                         cMotor1.setPower(-motorPower);
+                        Log.d("GRAPHING THING", "Motor speeds are as follows, " + vel);
                         timer.reset();
                     }
+                    //encoder.update();
+                    //otherEncoder.update();
                 }
                 @Override
                 public void onConditionMet() {
@@ -127,7 +141,7 @@ public class Launcher {
     }
 
     public double getMotorSpeed(){
-        return encoder.getVel();
+        return cMotor0.getVelocity();
     }
 
     public void forceLaunch(){
@@ -152,12 +166,14 @@ public class Launcher {
     public void motorOff(){
         if (launchTask != null) launchTask.interrupt(); //cancel attempted launches if user intervenes
         motorsOn = false;
+        cMotor0.setPower(0);
+        cMotor1.setPower(0);
     }
 
     public double abs(double v) {return v > 0? v : -v;}
 
     public boolean motorsAtSpeed(){
-        Vel = encoder.getVel();
+        Vel = cMotor0.getVelocity();
         boolean isGreaterThanMin = targetSpeed - motorWindow < Vel;
         boolean isLessThanMax = targetSpeed + 1  * motorWindow > Vel;
         boolean result = isGreaterThanMin && isLessThanMax;
@@ -170,8 +186,7 @@ public class Launcher {
         lastVel = Vel;
         lastTime = System.currentTimeMillis();
         //Log.d(DEBUG_TAG, "a: " + a);
-//        Log.d(DEBUG_TAG, "Motor speeds are as follows: " + cMotor0.getVelocity());
-//        Log.d(DEBUG_TAG, "Motor should be at speed " + motorSpeed + " returning " + result);
+        Log.d(DEBUG_TAG, "Motor should be at speed " + motorSpeed + ", got " + Vel + " returning " + result);
         return result;
     }
 
@@ -182,6 +197,7 @@ public class Launcher {
             return;
         } //Just so there's never a bunch of invisible threads in the background
         motorOn();
+        waitATinyBit = getMotorSpeed() < 100;
         launchTask = new Serialiser("Launch " + failed_launches_called) {
             @Override
             public boolean condition() {
@@ -189,10 +205,27 @@ public class Launcher {
                 }
                 @Override
                 public void onConditionMet() {
-                    Log.d(DEBUG_TAG, "Launching disk at speed " + encoder.getVel());
-                    forceLaunch = false;
-                    isLaunch = 1;
-                    flick();
+                    Log.d(DEBUG_TAG, "Launching disk at speed " + getMotorSpeed());
+                    if (waitATinyBit){
+                        new EggTimer() {
+                            @Override
+                            public long getLen() {
+                                return 100;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                forceLaunch = false;
+                                isLaunch = 1;
+                                flick();
+                            }
+                        }.start();
+                    } else {
+                        forceLaunch = false;
+                        isLaunch = 1;
+                        flick();
+                    }
+
                 }
             };
         launchTask.start();

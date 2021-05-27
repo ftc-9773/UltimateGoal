@@ -15,8 +15,6 @@ public class VelPIDController {
     private double integral;
     public double derivative;
     public double prevError;
-    public ArrayList<Double> errorQueue = new ArrayList<>();
-    public ArrayList<Long> timeQueue = new ArrayList<>();
     private double output;
     private long lastTime;
     private long deltaTime;
@@ -49,44 +47,29 @@ public class VelPIDController {
         // calculate helper variables
         deltaTime = System.currentTimeMillis() - lastTime;
         // If it is the first run, just return proportional error as i and d cannot be cauculated yet
-        Log.d("P.I.D", "Got PID Correction. First run: " + firstRun + " delta time: " + deltaTime);
         if (firstRun || deltaTime > maxDeltaTime) {
             firstRun = false;
             output =  error * KP;
         } else if (deltaTime == 0){
-            output = error * KP;
-        } else if (prevError != error){
+            output = error * KP + integral * KI;
+            Log.d(name + "Error", "DT = 0");
+        } else {
             // Calculate I and D errors
             integral = 0.9 * integral + (error * deltaTime);
-            errorQueue.add(error);
-            if (errorQueue.size() > 5) {
-                errorQueue.remove(0);
-            }
-            timeQueue.add(deltaTime);
-
             derivative = (error - prevError) / deltaTime;
-
             if (DEBUG){
-                //Log.i("PID-", "I : "+ integral);
-                //Log.d("PID", "D : "+ derivative );
+                Log.i("PID-", "I : "+ integral);
+                Log.d("PID", "D : "+ derivative );
+                Log.d(name, "," + System.currentTimeMillis() + "," + error + "," + derivative);
             }
-            //Log.d(name, "," + System.currentTimeMillis() + "," + error + "," + derivative);
             output = KP * error + KI * integral + KD * derivative;
-            if (Double.isNaN(output)) {
-                output = KP * error + KI * integral;
-            }
-        } else {
-            output = error * KP + derivative * KD + integral * KP;
         }
         // Set previous values for next time
 
-        if (error > 700 || error < -700) {
-            output = prevError * KP;
-        } else {
-            lastTime = System.currentTimeMillis();
-            prevError = error;
-        }
+        lastTime = System.currentTimeMillis();
+        prevError = error;
 
+        if (DEBUG) Log.d("P.I.D", "Got PID Correction. First run: " + firstRun + " delta time: " + deltaTime);
         return output;
     }
 

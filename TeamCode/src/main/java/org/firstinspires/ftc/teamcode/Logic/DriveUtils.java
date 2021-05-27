@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.Components.actuators.Encoder;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
 import org.firstinspires.ftc.teamcode.Utilities.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.JsonReader;
+import org.opencv.core.Mat;
 
 public class DriveUtils {
     final static String TAG = "DriveUtils";
@@ -24,6 +25,7 @@ public class DriveUtils {
     public static final double      COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV*WHEEL_TURNS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
     static private final double     INCHES_PER_ENCODER_COUNT = 2 * Math.PI / 2048;
     double rotTol, rotMinPow, rotExitSpeed;
+    double minDistPow = 0.1;
     double maxTurnPower;
 
     public DriveUtils() {
@@ -70,8 +72,11 @@ public class DriveUtils {
         Log.d(TAG, "m_Target Heading: " + orientation);
         Log.d(TAG, "m_Heading: " + currHeading);
         Log.d(TAG, "mError: " + error);
+        Log.d(TAG, "m_xy " + x + "," + y);
         double correction = headingPID.getPIDCorrection(error);
         Log.d(TAG, "_MData," + headingPID.prevError + "," + headingPID.derivative + "," + correction);
+        if (Math.abs(x) < minDistPow && Math.abs(x) > 0.001) x = Math.signum(x) * minDistPow;
+        if (Math.abs(y) < minDistPow && Math.abs(y) > 0.001) y = Math.signum(y) * minDistPow;
         Globals.drivebase.driveSimple(x, y, correction);
     }
 
@@ -106,7 +111,7 @@ public class DriveUtils {
             if (rotation > 0.0005) {
                 rotation += rotMinPow;
             } else if (rotation < -0.0005) {
-                rotation -= rotMinPow;
+                rotation = -rotMinPow;
             } else {
                 rotation = 0;
                 //return;
@@ -186,6 +191,7 @@ public class DriveUtils {
             } else if (speed < -0.7){
                 speed = -0.7;
             }
+            Log.d(TAG, "Speed: " + speed);
             maintainHeading(Math.cos(ang) * speed, -Math.sin(ang) * speed);
 
         }

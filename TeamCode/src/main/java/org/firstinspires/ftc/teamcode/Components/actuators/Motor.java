@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
@@ -19,7 +20,7 @@ public class Motor extends BaseActuator {
     double power = 0;
     double velocity = 0;
 
-    DcMotor internal_motor;
+    DcMotorEx internal_motor;
     //Encoder internal_encoder;
     String TAG = "DCMOTOR ";
 
@@ -27,7 +28,7 @@ public class Motor extends BaseActuator {
 
     public Motor(String name){
         super();
-        internal_motor = Globals.hardwareMap.get(DcMotor.class, name);
+        internal_motor = Globals.hardwareMap.get(DcMotorEx.class, name);
         setZeroPowerMode(DcMotor.ZeroPowerBehavior.FLOAT); //default zero power behavior should probably be this.
         //internal_encoder = new Encoder(name);
         //ActuatorStorage.remove_actuator(internal_encoder);
@@ -44,6 +45,24 @@ public class Motor extends BaseActuator {
     //public void resetEncoder() {
         //internal_encoder.reset();
     //}
+
+    public PIDFCoefficients getPIDFC(){
+        return internal_motor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void _setInternalPID(double k, double i, double d){
+        internal_motor.setVelocityPIDFCoefficients(k,i,d,0);
+    }
+
+
+    //Rad / s
+    public void setVelocity(double v){
+        internal_motor.setVelocity(v * Encoder.COUNTS_PER_REVOLUTION / Math.PI / 2); //In ticks per second. Only used in one spot so....
+    }
+
+    public double getVelocity(){
+        return internal_motor.getVelocity() / Encoder.COUNTS_PER_REVOLUTION * Math.PI * 2; //In ticks per second
+    }
 
     public void setZeroPowerMode(DcMotor.ZeroPowerBehavior mode){
         internal_motor.setZeroPowerBehavior(mode);
