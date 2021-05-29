@@ -58,9 +58,9 @@ ONE:write "In one"
 ONE:hold
 ONE:drive 0 22
 ONE:launch
-ONE:waitTime 0.2
+ONE:waitTime 0.1
 ONE:launch
-ONE:waitTime 0.2
+ONE:waitTime 0.1
 ONE:drive -15 0
 ONE:intakeOn
 ONE:drive 0 10
@@ -85,7 +85,7 @@ ONE:raiseArm
 ONE:waitTime 0.5
 ONE:drive -22 0
 ONE:lowerArm
-ONE:drive 0 -82
+ONE:drive 0 -80
 ONE:waitTime 0.3
 ONE:closeHook
 ONE:waitTime 0.5
