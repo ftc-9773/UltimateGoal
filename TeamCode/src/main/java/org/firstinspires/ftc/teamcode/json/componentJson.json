@@ -11,14 +11,14 @@
   "motorWindow" : 4,
 
   "lkp" : 0.002,
-  "lki" : 0.0005,
-  "lkd" : 0.0000,
-  "lDecay": 0.095,
+  "lki" : 0.0003,
+  "lkd" : 0.0002,
+  "lDecay": 0.09,
 
   "drivebaseXslow" : 0.2,
   "drivebaseYslow" : 0.2,
   "drivebaseRslow" : 0.3,
 
-  "TAG" : "ZERO"
+  "TAG" : "ONE"
 
 }

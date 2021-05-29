@@ -77,4 +77,8 @@ public class RasiCommands {
         }
     }
 
+    public void setTAGS(String tag){
+
+    }
+
 }

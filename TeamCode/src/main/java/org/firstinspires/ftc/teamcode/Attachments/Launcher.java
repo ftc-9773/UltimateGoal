@@ -2,24 +2,17 @@ package org.firstinspires.ftc.teamcode.Attachments;
 
 import android.util.Log;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-
-import org.firstinspires.ftc.teamcode.Components.actuators.Encoder;
+import org.firstinspires.ftc.teamcode.Components.sensors.Encoder;
 import org.firstinspires.ftc.teamcode.Components.actuators.Motor;
 import org.firstinspires.ftc.teamcode.Components.actuators.Servo;
-import org.firstinspires.ftc.teamcode.Components.actuators.SimpleMotor;
 import org.firstinspires.ftc.teamcode.Utilities.EggTimer;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
-import org.firstinspires.ftc.teamcode.Utilities.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.Serialiser;
 import org.firstinspires.ftc.teamcode.Utilities.Timer;
 import org.firstinspires.ftc.teamcode.Utilities.VelPIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.JsonReader;
 
-import java.sql.Time;
-
 import static org.firstinspires.ftc.teamcode.Utilities.Globals.DEBUG_LAUNCHER;
-import static org.firstinspires.ftc.teamcode.Utilities.Globals.launcher;
 
 public class Launcher {
     public static String DEBUG_TAG = "Launcher";

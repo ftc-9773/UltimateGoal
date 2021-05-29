@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.Testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Components.actuators.Encoder;
 import org.firstinspires.ftc.teamcode.Components.actuators.Motor;
 import org.firstinspires.ftc.teamcode.opmodes.Templates.BasicOpMode;
 

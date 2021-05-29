@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode.Components.actuators;
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.Components.sensors.Encoder;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
 
 import java.util.ArrayList;

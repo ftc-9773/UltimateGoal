@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.Logic;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.Components.actuators.Encoder;
+import org.firstinspires.ftc.teamcode.Components.sensors.Encoder;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
 import org.firstinspires.ftc.teamcode.Utilities.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.JsonReader;
-import org.opencv.core.Mat;
 
 public class DriveUtils {
     final static String TAG = "DriveUtils";

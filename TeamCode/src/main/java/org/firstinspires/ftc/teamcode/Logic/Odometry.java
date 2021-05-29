@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Logic;
 
-import org.firstinspires.ftc.teamcode.Components.actuators.Encoder;
+import org.firstinspires.ftc.teamcode.Components.sensors.Encoder;
 
 public class Odometry {
     Encoder e1, e2, e3;
