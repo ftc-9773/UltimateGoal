@@ -1,0 +1,19 @@
+resetGyro
+lowerMotorSpeed
+motorsOn
+drive 0 46
+waitTime 0.1
+drive -34 0
+waitTime 0.5
+launch
+waitTime 0.4
+drive -6 0
+launch
+waitTime 0.4
+drive -6 0
+waitTime 0.4
+launch
+waitTime 0.1
+motorsOff
+raiseMotorSpeed
+

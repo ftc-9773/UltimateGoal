@@ -54,13 +54,14 @@ public class simpleTeleOp extends BasicFullOpMode {
         powerPoleScorer.processRasiCommands(new RobotV1Commands());
         gyro.setZeroPosition();
         while (opModeIsActive()){
-            hitPowerPoles.recordNewValue(gamepad2.right_bumper);
+            hitPowerPoles.recordNewValue(gamepad1.x);
             if (hitPowerPoles.isJustOn()){
                 runningRasi = true;
+                telemetry.addLine("Creating rasi serialiser");
                 s = new Serialiser() {
                     @Override
                     public boolean condition() {
-                        return runningRasi;
+                        return !runningRasi;
                     }
                     @Override
                     public void during(){
@@ -72,11 +73,14 @@ public class simpleTeleOp extends BasicFullOpMode {
 
                     @Override
                     public void onConditionMet() {
+
                     }
                 };
                 s.start();
+                write("starting rasi");
                 powerPoleScorer.compileRasi();
                 runningRasi = false;
+                powerPoleScorer = new RasiInterpreter("/sdcard/FIRST/ftc9773/2021/rasi/", "powerPole.rasi");
             }
             //DRIVING
             gp2A.recordNewValue(gamepad2.a);
@@ -125,8 +129,8 @@ public class simpleTeleOp extends BasicFullOpMode {
                launcher.motorOff();
            }
            if (g1x.isOn()) {
-               launcher.setMode(Launcher.MODE.POLE);
-               launcher.motorOn();
+               //launcher.setMode(Launcher.MODE.POLE);
+               //launcher.motorOn();
            } else {
                launcher.setMode(Launcher.MODE.BASKET);
                //launcher.motorOn();
@@ -169,6 +173,7 @@ public class simpleTeleOp extends BasicFullOpMode {
            telemetry.addLine("Cycle time " + timer.timeElapsed());
            telemetry.addLine("Launch Motor speeds " + launcher.getMotorSpeed());
            telemetry.addLine("Voltage: " + Globals.restingVoltage);
+           telemetry.addLine("Run Rasi: " + runningRasi);
            //telemetry.addLine("Heading: " + gyro.getHeading());
            //Log.d("PID TRACKING", "" + launcher.getMotorSpeed());
            telemetry.update();

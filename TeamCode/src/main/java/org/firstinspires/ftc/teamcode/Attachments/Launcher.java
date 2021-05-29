@@ -173,6 +173,10 @@ public class Launcher {
 
     public double abs(double v) {return v > 0? v : -v;}
 
+    public void forceUpdateEncoder(){
+        encoder.update();
+    }
+
     public boolean motorsAtSpeed(){
         Vel = getMotorSpeed();
         boolean isGreaterThanMin = targetSpeed - motorWindow < Vel;

@@ -64,6 +64,7 @@ public class LauncherTesting extends BasicOpMode {
                 launcher.cMotor1.setPower(-motorPowers);
             }
 
+            launcher.forceUpdateEncoder();
             telemetry.addLine(rotate());
             telemetry.addLine("Cycle time " + timer.timeElapsed());
             telemetry.addLine("Launch Motor speeds " + launcher.getMotorSpeed());

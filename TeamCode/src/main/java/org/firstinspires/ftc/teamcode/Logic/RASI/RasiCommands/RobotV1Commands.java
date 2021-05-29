@@ -51,6 +51,10 @@ public class RobotV1Commands extends RasiCommands{
         driveUtils.setTrackedHeading(heading * Math.PI / 180);
     }
 
+    public void resetGyro(){
+        Globals.gyro.setZeroPosition();
+    }
+
     public void Launch(){
         Globals.launcher.launchDisk();
         waitTime(0.01);
