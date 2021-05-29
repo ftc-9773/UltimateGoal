@@ -19,6 +19,7 @@ public class VelPIDController {
     private long lastTime;
     private long deltaTime;
     private boolean firstRun = true;
+    private double decayCoeff = 0.99;
     public String name = "PID";
 
     private boolean useExponential;
@@ -38,6 +39,23 @@ public class VelPIDController {
         }
     }
 
+    public VelPIDController(double KP, double KI, double KD,double decayCoeff) {
+        this.KP = KP;
+        this.KI = KI;
+        this.KD = KD;
+        this.decayCoeff = decayCoeff;
+        useExponential = false;
+        if (DEBUG) {
+            Log.i("PID", "KP: " + KP);
+            Log.i("PID", "KI: " + KI);
+            Log.i("PID", "KD: " + KD);
+            Log.i("PID", "K_decay: " + decayCoeff);
+
+        }
+    }
+
+
+
     public double getPIDCorrection(double error, double derivative, double decay){
         return 0;
     }
@@ -55,7 +73,7 @@ public class VelPIDController {
             Log.d(name + "Error", "DT = 0");
         } else {
             // Calculate I and D errors
-            integral = 0.9 * integral + (error * deltaTime);
+            integral = decayCoeff * integral + (error * deltaTime);
             derivative = (error - prevError) / deltaTime;
             if (DEBUG){
                 Log.i("PID-", "I : "+ integral);

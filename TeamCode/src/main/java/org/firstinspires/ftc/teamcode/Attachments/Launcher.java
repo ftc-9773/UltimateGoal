@@ -33,8 +33,7 @@ public class Launcher {
     boolean forceLaunch = false;
     public Motor cMotor0;
     public Motor cMotor1;
-    public Encoder encoder;
-    public Encoder otherEncoder;
+    public Encoder encoder, otherEncoder;
     boolean waitATinyBit = false;
 
     int isLaunch = 0;
@@ -58,7 +57,7 @@ public class Launcher {
         cMotor1 = new Motor("launchMotor1");
 
         encoder = new Encoder("launchMotor1");
-        //otherEncoder = new Encoder("launchMotor0");
+        otherEncoder = new Encoder("launchMotor0");
         flickServo = new Servo("lServo");
 
         JsonReader reader = new JsonReader("componentJson");
@@ -70,13 +69,13 @@ public class Launcher {
         baseMotorPower = reader.getDouble("launchMotorBasePower", 0.77);
         basePolePower = reader.getDouble("launchMotorBasePower", 0.75);
         motorBasePower = reader.getDouble("launchMotorBasePower", 0.75);
-        velPID = new VelPIDController(reader.getDouble("lkp"), reader.getDouble("lki"), reader.getDouble("lkd"));
+        velPID = new VelPIDController(reader.getDouble("lkp"), reader.getDouble("lki"), reader.getDouble("lkd"),reader.getDouble("lDecay",.95));
         velPID.name = "VELPID";
         targetSpeed = motorSpeed;
         flickServo.setPosition(flickClosePos);
         Log.d(DEBUG_TAG, "PIDF C: " + cMotor0.getPIDFC());
-        cMotor0._setInternalPID(10, 3, 1);
-        cMotor1._setInternalPID(10, 3, 1);
+//        cMotor0._setInternalPID(10, 3, 1);
+//        cMotor1._setInternalPID(10, 3, 1);
     }
 
 
@@ -84,7 +83,7 @@ public class Launcher {
     public void motorOn(){
         motorsOn = true;
         Log.d(DEBUG_TAG, "Turning on motors");
-        final double minCycleTime = 10;
+        final double minCycleTime = 1;
         //cMotor0.setVelocity(targetSpeed);
         //cMotor1.setVelocity(-targetSpeed);
         if (velocityController == null){
@@ -101,6 +100,8 @@ public class Launcher {
                 public void during(){
                     if (!(timer.timeElapsed() < minCycleTime)){
                         double vel = cMotor0.getVelocity();
+                        double vel_aux = encoder.getVel();
+                        Log.d("Vel_Encoder", ","+ vel+ ","+vel_aux);
                         double correction = velPID.getPIDCorrection(targetSpeed, vel);
 //                        if (correction > 0.15){
 //                            correction = 0.15;
@@ -119,11 +120,10 @@ public class Launcher {
                         if (motorPower < -1) motorPower = -1;
                         cMotor0.setPower(motorPower);
                         cMotor1.setPower(-motorPower);
-                        Log.d("GRAPHING THING", "Motor speeds are as follows, " + vel);
+                        Log.d("GRAPHING THING", "Motor speeds are as follows, " + vel +","+vel_aux);
                         timer.reset();
                     }
-                    //encoder.update();
-                    //otherEncoder.update();
+                    encoder.update();
                 }
                 @Override
                 public void onConditionMet() {
