@@ -16,6 +16,7 @@ public class VelPIDController {
     public double derivative;
     public double prevError;
     private double output;
+    public boolean enableI = true;
     private long lastTime;
     private long deltaTime;
     private boolean firstRun = true;
@@ -64,16 +65,27 @@ public class VelPIDController {
     public double getPIDCorrection(double error) {
         // calculate helper variables
         deltaTime = System.currentTimeMillis() - lastTime;
+        if (!enableI){
+            integral = 0;
+        }
         // If it is the first run, just return proportional error as i and d cannot be cauculated yet
         if (firstRun || deltaTime > maxDeltaTime) {
             firstRun = false;
             output =  error * KP;
         } else if (deltaTime == 0){
-            output = error * KP + integral * KI;
+            if (!enableI){
+                integral = 0;
+                output = error * KP;
+            } else {
+                output = error * KP + integral * KI;
+            }
             Log.d(name + "Error", "DT = 0");
         } else {
             // Calculate I and D errors
             integral = decayCoeff * integral + (error * deltaTime);
+            if (!enableI){
+                integral = 0;
+            }
             derivative = (error - prevError) / deltaTime;
             if (DEBUG){
                 Log.i("PID-", "I : "+ integral);

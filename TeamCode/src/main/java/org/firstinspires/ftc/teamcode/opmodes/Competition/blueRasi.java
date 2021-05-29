@@ -22,14 +22,15 @@ public class blueRasi extends BasicVisionOpMode {
         super.initialise();
         rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/ftc9773/2021/rasi/", "blue.rasi");
         rasiInterpreter.processRasiCommands(new RobotV1Commands());
-        updateReadings();
+        //updateReadings();
     }
 
     @Override
     public void run() {
         String[] Tags = new String[1];
         JsonReader reader = new JsonReader("componentJson");
-        Tags[0] = number.toString().toUpperCase();
+        //Tags[0] = number.toString().toUpperCase();
+        Tags[0] = reader.getString("TAG");
         rasiInterpreter.setTags(Tags);
         rasiInterpreter.compileRasi();
     }

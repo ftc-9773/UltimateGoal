@@ -5,6 +5,7 @@ import android.util.Log;
 import com.qualcomm.ftccommon.configuration.EditAnalogInputDevicesActivity;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Components.actuators.ActuatorManager;
 import org.firstinspires.ftc.teamcode.Components.actuators.ActuatorStorage;
@@ -82,5 +83,16 @@ public abstract class BasicOpMode extends LinearOpMode {
         state ++;
         if (state > 4) state = 0;
         return returnchar;
+    }
+
+    protected double getBatteryVoltage() {
+        double result = Double.POSITIVE_INFINITY;
+        for (VoltageSensor sensor : hardwareMap.voltageSensor) {
+            double voltage = sensor.getVoltage();
+            if (voltage > 0) {
+                result = Math.min(result, voltage);
+            }
+        }
+        return result;
     }
 }

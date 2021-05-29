@@ -5,12 +5,10 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Globals;
 import org.firstinspires.ftc.teamcode.Utilities.Timer;
 
 import java.util.ArrayList;
-import java.util.function.ToIntFunction;
 
 public class Encoder extends BaseActuator{
     public DcMotor encoder;
@@ -27,18 +25,31 @@ public class Encoder extends BaseActuator{
     private long alt_last_time;
     private double alt_v;
     private long consecutive_errors = 0;
-    public static final int COUNTS_PER_REVOLUTION = 28;
+    public static final int COUNTS_PER_REVOLUTION_NEVEREST = 28;
+    public static final int COUNTS_PER_REVOLUTION_REV_EXTERNAL = 8192;
+    enum mode {NEVEREST, REV_E};
+    public int COUNTS_PER_REVOLUTION = -1;
     long minDT = 5;
     Timer timerUtil = new Timer();
 
     public Encoder(String name){
-        encoder = Globals.hardwareMap.get(DcMotorEx.class, name);
+        encoder = Globals.hardwareMap.get(DcMotor.class, name);
         TAG = TAG + name + " PORT " + encoder.getPortNumber();
-        encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //encoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         last_time = System.currentTimeMillis();
         alt_last_time = System.currentTimeMillis();
         last_pos = encoder.getCurrentPosition();
-        reset();
+        if (COUNTS_PER_REVOLUTION == -1){
+            COUNTS_PER_REVOLUTION = COUNTS_PER_REVOLUTION_NEVEREST; //Default
+        }
+        //reset();
+    }
+    public Encoder(String name, mode m){
+        if (m == mode.NEVEREST){
+            COUNTS_PER_REVOLUTION = COUNTS_PER_REVOLUTION_NEVEREST;
+        } else if (m == mode.REV_E){
+            COUNTS_PER_REVOLUTION = COUNTS_PER_REVOLUTION_REV_EXTERNAL;
+        }
     }
 
     public long getPos(){
@@ -96,10 +107,10 @@ public class Encoder extends BaseActuator{
                 if (velTracker.size() > 2){
                     velTracker.remove(0);
                 }
-                if ((vel > 70 + velTracker.get(0) || vel < velTracker.get(0) - 70) && Math.abs(vel) > 100){
-                    return;
-                }
-                alt_v = vel / (alt_time - alt_last_time) / COUNTS_PER_REVOLUTION * Math.PI * 2 * 1000;
+//                if ((vel > 70 + velTracker.get(0) || vel < velTracker.get(0) - 70) && Math.abs(vel) > 100){
+//                    return;
+//                }
+                alt_v = vel / (alt_time - alt_last_time) / COUNTS_PER_REVOLUTION_NEVEREST * Math.PI * 2 * 1000;
                 //vel = (double) (pos - last_pos) / (time - last_time) * 1000;
                 //Log.d("Encoder", "Change in ticks " + (pos - last_pos) + "Change in time: " + (time - last_time));
 
@@ -120,7 +131,7 @@ public class Encoder extends BaseActuator{
     //Radians / s
     public double getVel(){
         //update();
-        return -vel;
+        return vel;
     }
 
     public void reset(){

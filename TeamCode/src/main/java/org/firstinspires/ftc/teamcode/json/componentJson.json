@@ -6,12 +6,12 @@
   "launchMotorBasePower" : 0.78,
   "launchMotorBasePowerPoles" : 0.745,
   "launchClosePos" : 0.59,
-  "launchMotorSpeed" : 445,
+  "launchMotorSpeed" : 450,
   "launchPoleSpeed" : 400,
-  "motorWindow" : 6,
+  "motorWindow" : 4,
 
   "lkp" : 0.002,
-  "lki" : 0.000001,
+  "lki" : 0.0005,
   "lkd" : 0.0000,
   "lDecay": 0.095,
 
@@ -19,6 +19,6 @@
   "drivebaseYslow" : 0.2,
   "drivebaseRslow" : 0.3,
 
-  "TAG" : "FOUR"
+  "TAG" : "ZERO"
 
 }

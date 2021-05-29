@@ -22,6 +22,7 @@ public class Globals {
 
     public static ActuatorStorage storage;
 
+    public static double restingVoltage = 13;
 
     public static Boolean DEBUG_DRIVEBASE = false;
     public static Boolean DEBUG_LAUNCHER = true;

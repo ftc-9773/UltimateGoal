@@ -40,6 +40,7 @@ public class Launcher {
     Servo flickServo;
     Timer timer = new Timer();
     Timer otherTimer = new Timer();
+    double savedKI;
 
     double realVelocityThisTime;
     double lastVel = -1, Vel;
@@ -56,8 +57,8 @@ public class Launcher {
         cMotor0 = new Motor("launchMotor0");
         cMotor1 = new Motor("launchMotor1");
 
-        encoder = new Encoder("launchMotor1");
-        otherEncoder = new Encoder("launchMotor0");
+        encoder = new Encoder("launchMotor0");
+        //otherEncoder = new Encoder("hookMotor");
         flickServo = new Servo("lServo");
 
         JsonReader reader = new JsonReader("componentJson");
@@ -71,9 +72,10 @@ public class Launcher {
         motorBasePower = reader.getDouble("launchMotorBasePower", 0.75);
         velPID = new VelPIDController(reader.getDouble("lkp"), reader.getDouble("lki"), reader.getDouble("lkd"),reader.getDouble("lDecay",.95));
         velPID.name = "VELPID";
+        savedKI = velPID.KI;
         targetSpeed = motorSpeed;
         flickServo.setPosition(flickClosePos);
-        Log.d(DEBUG_TAG, "PIDF C: " + cMotor0.getPIDFC());
+        //Log.d(DEBUG_TAG, "PIDF C: " + cMotor0.getPIDFC());
 //        cMotor0._setInternalPID(10, 3, 1);
 //        cMotor1._setInternalPID(10, 3, 1);
     }
@@ -91,6 +93,11 @@ public class Launcher {
             timer.reset();
             velPID.resetPID();
             Log.d(DEBUG_TAG, "velocityController didn't exist");
+            if (Globals.restingVoltage < 13){
+                velPID.KI = 3 * savedKI;
+            } else {
+                velPID.KI = savedKI;
+            }
             velocityController = new Serialiser() {
                 @Override
                 public boolean condition() {
@@ -99,9 +106,9 @@ public class Launcher {
                 @Override
                 public void during(){
                     if (!(timer.timeElapsed() < minCycleTime)){
-                        double vel = cMotor0.getVelocity();
-                        double vel_aux = encoder.getVel();
-                        Log.d("Vel_Encoder", ","+ vel+ ","+vel_aux);
+                        //double vel = cMotor0.getVelocity();
+                        double vel = encoder.getVel();
+                        Log.d("Vel_Encoder", ","+ vel+ ",");
                         double correction = velPID.getPIDCorrection(targetSpeed, vel);
 //                        if (correction > 0.15){
 //                            correction = 0.15;
@@ -120,10 +127,11 @@ public class Launcher {
                         if (motorPower < -1) motorPower = -1;
                         cMotor0.setPower(motorPower);
                         cMotor1.setPower(-motorPower);
-                        Log.d("GRAPHING THING", "Motor speeds are as follows, " + vel +","+vel_aux);
+                        Log.d("GRAPHING THING", "Motor speeds are as follows, " + vel +",");
                         timer.reset();
                     }
                     encoder.update();
+                    //otherEncoder.update();
                 }
                 @Override
                 public void onConditionMet() {
@@ -141,7 +149,7 @@ public class Launcher {
     }
 
     public double getMotorSpeed(){
-        return cMotor0.getVelocity();
+        return encoder.getVel();
     }
 
     public void forceLaunch(){
@@ -173,7 +181,7 @@ public class Launcher {
     public double abs(double v) {return v > 0? v : -v;}
 
     public boolean motorsAtSpeed(){
-        Vel = cMotor0.getVelocity();
+        Vel = getMotorSpeed();
         boolean isGreaterThanMin = targetSpeed - motorWindow < Vel;
         boolean isLessThanMax = targetSpeed + 1  * motorWindow > Vel;
         boolean result = isGreaterThanMin && isLessThanMax;
@@ -186,7 +194,7 @@ public class Launcher {
         lastVel = Vel;
         lastTime = System.currentTimeMillis();
         //Log.d(DEBUG_TAG, "a: " + a);
-        Log.d(DEBUG_TAG, "Motor should be at speed " + motorSpeed + ", got " + Vel + " returning " + result);
+        //Log.d(DEBUG_TAG, "Motor should be at speed " + motorSpeed + ", got " + Vel + " returning " + result);
         return result;
     }
 

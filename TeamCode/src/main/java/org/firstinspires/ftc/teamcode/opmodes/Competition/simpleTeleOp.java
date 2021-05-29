@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Logic.DriveUtils;
 import org.firstinspires.ftc.teamcode.Logic.RASI.Rasi.RasiInterpreter;
 import org.firstinspires.ftc.teamcode.Logic.RASI.RasiCommands.RobotV1Commands;
 import org.firstinspires.ftc.teamcode.Utilities.Button;
+import org.firstinspires.ftc.teamcode.Utilities.Globals;
 import org.firstinspires.ftc.teamcode.Utilities.Serialiser;
 import org.firstinspires.ftc.teamcode.Utilities.Timer;
 import org.firstinspires.ftc.teamcode.opmodes.Templates.BasicFullOpMode;
@@ -19,6 +20,12 @@ import org.firstinspires.ftc.teamcode.opmodes.Templates.BasicFullOpMode;
 public class simpleTeleOp extends BasicFullOpMode {
     boolean runningRasi;
     RasiInterpreter powerPoleScorer;
+
+    @Override
+    public void initialise() {
+        super.initialise();
+        Globals.restingVoltage = getBatteryVoltage();
+    }
 
     @Override
     public void run() {
@@ -153,12 +160,16 @@ public class simpleTeleOp extends BasicFullOpMode {
                 hookState = !hookState;
             }
 
+            if (launcher.getMotorSpeed() == 0 && abs(gamepad1.left_stick_x) > 0.1 && abs(gamepad1.left_stick_y) < 0.1 && abs(gamepad1.right_stick_x) < 0.1 && gamepad1.left_trigger < 0.1 && gamepad1.right_trigger < 0.1){
+                Globals.restingVoltage = getBatteryVoltage();
+            }
             //TELEMETRY
            telemetry.addLine("Switch state " + hook.Switch());
            telemetry.addLine(rotate());
            telemetry.addLine("Cycle time " + timer.timeElapsed());
            telemetry.addLine("Launch Motor speeds " + launcher.getMotorSpeed());
-           telemetry.addLine("Heading: " + gyro.getHeading());
+           telemetry.addLine("Voltage: " + Globals.restingVoltage);
+           //telemetry.addLine("Heading: " + gyro.getHeading());
            //Log.d("PID TRACKING", "" + launcher.getMotorSpeed());
            telemetry.update();
 

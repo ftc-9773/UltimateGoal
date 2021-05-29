@@ -18,11 +18,11 @@ public class Intake {
     }
 
     public void up(){
-        servo.setPosition(0.75);
+        servo.setPosition(0.5);
     }
 
     public void down(){
-        servo.setPosition(0.25);
+        servo.setPosition(0.9);
     }
 
     public void on(){

@@ -16,7 +16,7 @@ public class ServoConfiger extends BasicOpMode {
 //        waitTime(5000);
 //        s.setPosition(1);
 //        waitTime(5000);
-        Servo servo = new Servo("lServo");
+        Servo servo = new Servo("intakeServo");
         write("0");
         servo.setPosition(0);
         waitTime(1500);
