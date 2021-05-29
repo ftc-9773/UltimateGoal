@@ -1,20 +1,21 @@
 intakeUp
-ZERO:closeHook
-ZERO:waitTime 0.1
-ZERO:hold
-ZERO:drive -8 49
+intakeOn
+closeHook
+waitTime 0.1
+intakeOff
+raiseArm
+ZERO:motorsOn
+ZERO:drive -9 43
 ZERO:waitTime 0.05
 ZERO:stopDrive
-ZERO:motorsOn
-ZERO:waitTime 1
 ZERO:launch
-ZERO:waitTime 0.05
+ZERO:waitTime 0.1
 ZERO:launch
-ZERO:WaitTime 0.05
+ZERO:WaitTime 0.1
 ZERO:launch
-ZERO:waitTime 0.05
+ZERO:waitTime 0.1
 ZERO:motorsOff
-ZERO:drive 15 30
+ZERO:drive 20 32
 ZERO:waitTime 0.1
 ZERO:lowerArm
 ZERO:waitTime 1
@@ -23,8 +24,8 @@ ZERO:waitTime 0.5
 ZERO:raiseArm
 ZERO:waitTime 1
 ZERO:drive -20 0
-ZERO:wait 0.1
-ZERO:drive -13 -18.5
+ZERO:waitTime 0.1
+ZERO:drive -10 -18.5
 ZERO:waitTime 0.1
 ZERO:lowerArm
 ZERO:drive 0 -37
@@ -34,7 +35,7 @@ ZERO:raiseArm
 ZERO:waitTime 1
 ZERO:drive 0 68
 ZERO:waitTime 0.1
-ZERO:drive 30 0
+ZERO:drive 38 0
 ZERO:waitTime 0.1
 ZERO:lowerArm
 ZERO:waitTime 0.1
@@ -42,41 +43,37 @@ ZERO:openHook
 ZERO:waitTime 0.5
 ZERO:raiseArm
 ZERO:waitTime 0.1
-ZERO:drive -30 0
-ZERO:drive 0 -30
+ZERO:drive -38 0
+ZERO:drive 0 -25
 ZERO:waitTime 1
+
+ZERO:end
 
 
 ONE:closeHook
 ONE:waitTime 0.1
+ONE:write "In one"
 ONE:hold
 ONE:drive 0 22
-ONE:waitTime 0.1
-ONE:drive -25 0
-ONE:motorsOn
-ONE:lowerMotorSpeed
-ONE:waitTime 0.5
 ONE:launch
-ONE:waitTime 0.5
-ONE:raiseMotorSpeed
+ONE:waitTime 0.1
+ONE:launch
+ONE:waitTime 0.1
+ONE:drive -15 0
 ONE:intakeOn
-ONE:drive 0 9.5
+ONE:drive 0 10
 ONE:waitTime 0.1
-ONE:drive 10 0
-ONE:motorsOff
+ONE:drive 15 0
 ONE:waitTime 0.1
-ONE:drive 10 6
-ONE:motorsOn
-ONE:waitTime 0.5
+ONE:drive 0 6
+ONE:waitTime 0.1
 ONE:launch
-ONE:waitTime 0.5
+ONE:waitTime 0.1
 ONE:launch
-ONE:waitTime 0.5
-ONE:launch
-ONE:waitTime 0.2
+ONE:waitTime 0.1
 ONE:motorsOff
 ONE:intakeOff
-ONE:drive 0 56
+ONE:drive 0 58
 ONE:waitTime 0.1
 ONE:lowerArm
 ONE:waitTime 0.7
@@ -84,15 +81,15 @@ ONE:openHook
 ONE:waitTime 0.5
 ONE:raiseArm
 ONE:waitTime 0.5
-ONE:drive -20 0
+ONE:drive -25 0
 ONE:lowerArm
-ONE:drive 2 -84
-ONE:waitTime 0.3
-ONE:closeHook
+ONE:drive 5 -82
 ONE:waitTime 0.5
+ONE:closeHook
+ONE:waitTime 0.4
 ONE:raiseArm
 ONE:waitTime 0.5
-ONE:drive 18 40
+ONE:drive -8 40
 ONE:rotate 180
 ONE:lowerArm
 ONE:waitTime 0.5
