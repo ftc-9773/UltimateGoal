@@ -104,7 +104,7 @@ public class DriveUtils {
             currentTime = System.currentTimeMillis();
 
             error = setOnNegToPosPi(targetAngleRad - currentHeading);
-            double rotation = rotPID.getPIDCorrection(error);
+            double rotation = headingPID.getPIDCorrection(error);
 
             // may add this in if dt is too weak
             if (rotation > 0.0005) {

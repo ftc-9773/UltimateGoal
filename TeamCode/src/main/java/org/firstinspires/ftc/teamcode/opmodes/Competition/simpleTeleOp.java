@@ -42,7 +42,7 @@ public class simpleTeleOp extends BasicFullOpMode {
         Button gp2B = new Button();
         Button gp2Y = new Button();
         Button gp2X = new Button();
-        Button hitPowerPoles = new Button();
+        final Button hitPowerPoles = new Button();
         boolean holdHook = false;
         boolean hookState = false; //Close
         boolean otherhookstate = false; //Up
@@ -53,9 +53,12 @@ public class simpleTeleOp extends BasicFullOpMode {
         Serialiser s;
         powerPoleScorer.processRasiCommands(new RobotV1Commands());
         gyro.setZeroPosition();
+        drivebase.fieldCentric = false;
+        drivebase.setFieldCentricRotation(-90);
         while (opModeIsActive()){
             hitPowerPoles.recordNewValue(gamepad1.x);
             if (hitPowerPoles.isJustOn()){
+                drivebase.setFieldCentricRotation(0);
                 runningRasi = true;
                 telemetry.addLine("Creating rasi serialiser");
                 s = new Serialiser() {
@@ -65,7 +68,8 @@ public class simpleTeleOp extends BasicFullOpMode {
                     }
                     @Override
                     public void during(){
-                        if (gamepad2.left_bumper){
+                        hitPowerPoles.recordNewValue(gamepad1.x);
+                        if (hitPowerPoles.isJustOn()){
                             runningRasi = false;
                             powerPoleScorer.interrupt();
                         }
@@ -81,6 +85,8 @@ public class simpleTeleOp extends BasicFullOpMode {
                 powerPoleScorer.compileRasi();
                 runningRasi = false;
                 powerPoleScorer = new RasiInterpreter("/sdcard/FIRST/ftc9773/2021/rasi/", "powerPole.rasi");
+                drivebase.fieldCentric = false;
+                drivebase.setFieldCentricRotation(-90);
             }
             //DRIVING
             gp2A.recordNewValue(gamepad2.a);
@@ -112,10 +118,16 @@ public class simpleTeleOp extends BasicFullOpMode {
             } else if (gp2X.isJustOn()){
                 intake.up();
             }
-            diskLaunch.recordNewValue(gamepad1.left_trigger > 0.05);
+            if(gamepad2.left_trigger >0.05){
+                if(gamepad2.a)
+                    intake.down();
+                else
+                    intake.up();
+            }
+            diskLaunch.recordNewValue(gamepad1.left_trigger > 0.05 ||gamepad2.left_trigger > 0.05 );
             if (diskLaunch.isOn()){
                 intake.on();
-            } else if (abs(gamepad1.right_trigger) > 0.05){
+            } else if (abs(gamepad1.right_trigger) > 0.05 || gamepad2.right_trigger > 0.05){
                 intake.out();
             } else {
                 intake.off();

@@ -19,6 +19,7 @@ public class MecanumDrivebase {
     public boolean slowMode = false;
     static String TAG = "MDRIVEBASE";
     public boolean fieldCentric = false;
+    double fcRotation = 0; //Relative to gyro 0.
 
     public MecanumDrivebase(){
         mfr = new Motor("frdrive");
@@ -34,6 +35,11 @@ public class MecanumDrivebase {
         slowx = reader.getDouble("drivebaseXslow", 0.5);
         slowy = reader.getDouble("drivebaseYslow", 0.5);
         slowr = reader.getDouble("drivebaseRslow", 0.5);
+
+    }
+
+    public void setFieldCentricRotation(double r){
+        fcRotation = Math.toRadians(r);
     }
 
     //Drive at Vx, Vy, rotation_speed (units?). Rotates around center of robot.
@@ -48,6 +54,7 @@ public class MecanumDrivebase {
             double mag = Math.sqrt(x * x + y * y);
             double ang = Math.atan2(y, x);
             ang -= Globals.gyro.getHeading();
+            ang += fcRotation;
             x = mag * Math.cos(ang);
             y = mag * Math.sin(ang);
         }

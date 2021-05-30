@@ -28,6 +28,7 @@ public class Encoder extends BaseActuator {
     private long consecutive_errors = 0;
     public static final int COUNTS_PER_REVOLUTION_NEVEREST = 28;
     public static final int COUNTS_PER_REVOLUTION_REV_EXTERNAL = 8192;
+    public static final int COUNTS_PER_REVOLUTION_REV_INTERNAL = 0;
     enum mode {NEVEREST, REV_E};
     public int COUNTS_PER_REVOLUTION = -1;
     long minDT = 5;
@@ -55,6 +56,18 @@ public class Encoder extends BaseActuator {
 
     public long getPos(){
         return pos;
+    }
+
+    //In radians
+    public double getdx(){
+        return (encoder.getCurrentPosition() - pos) / (float)COUNTS_PER_REVOLUTION * 2 * Math.PI;
+    }
+
+    public void resetSmoothingQueue(){
+        for (int i = 0; i < posQueue.size(); i++) {
+            posQueue.remove(i);
+            timequeue.remove(i);
+        }
     }
 
     @Override

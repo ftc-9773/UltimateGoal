@@ -3,12 +3,12 @@
   "hookClosePos" : 0.55,
 
   "launchOpenPos" : 0.99,
-  "launchMotorBasePower" : 0.78,
+  "launchMotorBasePower" : 0.782,
   "launchMotorBasePowerPoles" : 0.735,
   "launchClosePos" : 0.59,
-  "launchMotorSpeed" : 450,
+  "launchMotorSpeed" : 453,
   "launchPoleSpeed" : 390,
-  "motorWindow" : 4,
+  "motorWindow" : 5,
 
   "lkp" : 0.002,
   "lki" : 0.0003,
@@ -19,6 +19,9 @@
   "drivebaseYslow" : 0.2,
   "drivebaseRslow" : 0.3,
 
-  "TAG" : "ONE"
+  "inServoUp" : 0.5,
+  "inServoDown" : 1.0,
+
+  "TAG" : "ZERO"
 
 }

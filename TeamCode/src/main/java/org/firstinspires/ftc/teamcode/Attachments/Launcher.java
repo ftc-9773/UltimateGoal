@@ -82,12 +82,13 @@ public class Launcher {
         //cMotor0.setVelocity(targetSpeed);
         //cMotor1.setVelocity(-targetSpeed);
         if (velocityController == null){
+            encoder.resetSmoothingQueue();
             otherTimer.reset();
             timer.reset();
             velPID.resetPID();
             Log.d(DEBUG_TAG, "velocityController didn't exist");
             if (Globals.restingVoltage < 13){
-                velPID.KI = 3 * savedKI;
+                velPID.KI = 1 * savedKI;
             } else {
                 velPID.KI = savedKI;
             }

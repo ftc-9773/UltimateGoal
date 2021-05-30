@@ -72,7 +72,7 @@ return activeTask == null;
                 if (limitSwitch.state()){
                     internalMotor.setPower(0);
                 } else{
-                    internalMotor.setPower(-0.05);
+                    internalMotor.setPower(-0.15);
                 }
             }
         };
@@ -103,7 +103,7 @@ return activeTask == null;
 
             @Override
             public void during() {
-                internalMotor.setPower(-0.4);
+                internalMotor.setPower(-0.45);
             }
 
             @Override
