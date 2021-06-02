@@ -3,14 +3,14 @@
   "hkd" : 1,
   "hki" : 0.0,
 
-  "rkp" : 0.4,
-  "rkd" : 0.4,
-  "rki" : 0.0,
+  "rkp" : 1.0,
+  "rkd" : 0.7,
+  "rki" : 0.1,
 
   "rotExitSpeed" : 0.1,
   "rotTol" : 0.06,
-  "rotMinPow" : 0.2,
-  "maxRotPow" : 0.5,
+  "rotMinPow" : 0.35,
+  "maxRotPow" : 0.7,
 
   "dkp" : 0.08,
   "dki" : 0.001,

@@ -26,6 +26,16 @@ public class RobotV1Commands extends RasiCommands{
         driveUtils.pidDrive(x, y);
     }
 
+    public void driveM(double x, double y, double pow){
+        driveUtils.pidDrive(x, y, pow);
+    }
+
+    public void kick(double x, double y, double r){
+        Globals.drivebase.driveSimple(x, y, r);
+        waitTime(0.05);
+        Globals.drivebase.driveSimple(0,0,0);
+    }
+
     //Degrees
     public void rotate(double ang){
         driveUtils.rotateToHeading(ang);

@@ -26,6 +26,7 @@ public class DriveUtils {
     double rotTol, rotMinPow, rotExitSpeed;
     double minDistPow = 0.1;
     double maxTurnPower;
+    double maxDistPower = 0.7;
 
     public DriveUtils() {
         JsonReader reader = new JsonReader("auto");
@@ -53,6 +54,7 @@ public class DriveUtils {
         rotPID = new PIDController(rkp, rki, rkd);
         drivePID = new PIDController(dkp, dki, dkd);
         headingPID = new PIDController(hkp, hki, hkd);
+        Globals.drivebase.fieldCentric = true;
         trackedHeading = 0;
         //Globals.drivebase.fieldCentric = true;
     }
@@ -81,11 +83,12 @@ public class DriveUtils {
 
     public void rotateToHeading(double goalHeading) {
         final double targetAngleRad = Math.toRadians(goalHeading);
-        trackedHeading = goalHeading;
+        Log.d(TAG, "Starting Rotation, goal heading is " + goalHeading + " targetHeading " + trackedHeading);
+        trackedHeading = Math.toRadians(goalHeading);
         // For calculating rotational speed:
         double lastHeading;
-        double currentHeading = Globals.gyro.getHeading();
         double lastTime;
+        double currentHeading = Globals.gyro.getHeading();
         double currentTime = System.currentTimeMillis();
         double lastError = 0.0;
 
@@ -98,15 +101,15 @@ public class DriveUtils {
 
             // update time and headings:
             currentHeading = Globals.gyro.getHeading(forceNewReading);
-            forceNewReading = !forceNewReading;
+            //forceNewReading = !forceNewReading;
 
             lastTime = currentTime;
             currentTime = System.currentTimeMillis();
 
             error = setOnNegToPosPi(targetAngleRad - currentHeading);
-            double rotation = headingPID.getPIDCorrection(error);
+            double rotation = rotPID.getPIDCorrection(error);
 
-            // may add this in if dt is too weak
+            // may add this in if di is too weak
             if (rotation > 0.0005) {
                 rotation += rotMinPow;
             } else if (rotation < -0.0005) {
@@ -143,6 +146,7 @@ public class DriveUtils {
         }
         Globals.drivebase.driveSimple(0, 0, 0);
         rotPID.resetPID();
+        Log.d(TAG, "Start ENDING rotation tracked heading is " + trackedHeading + " Current heading " + currentHeading);
     }
 
     private double setOnNegToPosPi(double num) {
@@ -174,7 +178,7 @@ public class DriveUtils {
         lastTime = System.currentTimeMillis();
         Globals.drivebase.driveSimple(Math.cos(ang) * speed, -Math.sin(ang) * speed, 0);
         lastEncoders = Globals.drivebase.getEncoders();
-        Log.d("DriveUtil", "Driving " + x + " " + y + ", ang is " + ang + " and starting speed " + speed);
+        Log.d("DriveUtils", "Driving " + x + " " + y + ", ang is " + ang + " and starting speed " + speed);
         //trackedHeading = Globals.gyro.getHeading();
         while (!Globals.opMode.isStopRequested()){
             error = mag - getDistTravelled();
@@ -185,10 +189,10 @@ public class DriveUtils {
                 break;
             }
             speed = drivePID.getPIDCorrection(error);
-            if (speed > 0.7){
-                speed = 0.7;
-            } else if (speed < -0.7){
-                speed = -0.7;
+            if (speed > maxDistPower){
+                speed = maxDistPower;
+            } else if (speed < -maxDistPower){
+                speed = -maxDistPower;
             }
             Log.d(TAG, "Speed: " + speed);
             maintainHeading(Math.cos(ang) * speed, -Math.sin(ang) * speed);
@@ -196,6 +200,13 @@ public class DriveUtils {
         }
         Globals.drivebase.driveSimple(0,0,0);
 
+    }
+
+    public void pidDrive(double x, double y, double maxPower){
+        double oldMaxPower = maxDistPower;
+        maxDistPower = maxPower;
+        pidDrive(x, y);
+        maxDistPower = oldMaxPower;
     }
 
     public double getClosestRightAnge(double ang){
