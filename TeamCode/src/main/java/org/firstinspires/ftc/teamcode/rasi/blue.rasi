@@ -55,9 +55,10 @@ ONE:closeHook
 ONE:waitTime 0.1
 ONE:write "In one"
 ONE:hold
-ONE:drive 0 22
+ONE:motorsOn
+ONE:drive 0 20
 ONE:launch
-ONE:waitTime 0.1
+ONE:waitTime 0.15
 ONE:launch
 ONE:waitTime 0.1
 ONE:drive -15 0
@@ -74,7 +75,7 @@ ONE:launch
 ONE:waitTime 0.1
 ONE:motorsOff
 ONE:intakeOff
-ONE:drive 0 58
+ONE:drive 0 56
 ONE:waitTime 0.1
 ONE:lowerArm
 ONE:waitTime 0.7
@@ -84,7 +85,7 @@ ONE:raiseArm
 ONE:waitTime 0.5
 ONE:drive -25 0
 ONE:lowerArm
-ONE:drive 5 -84
+ONE:drive 7 -86
 ONE:waitTime 0.5
 ONE:closeHook
 ONE:waitTime 0.4
@@ -98,6 +99,7 @@ ONE:openHook
 ONE:waitTime 0.5
 ONE:raiseArm
 ONE:rotate 0
+ONE:drive 0 -5
 
 FOUR:drive 0 44
 FOUR:drive -10 0
@@ -111,16 +113,16 @@ FOUR:waitTime 0.05
 FOUR:launch
 FOUR:motorsOff
 FOUR:drive 0 44
-FOUR:waitTime 0.2
+FOUR:waitTime 0.05
 FOUR:rotate 180
-FOUR:waitTime 0.1
+FOUR:waitTime 0.05
 FOUR:lowerArm
 FOUR:waitTime 0.05
 FOUR:openHook
-FOUR:waitTime 0.5
+FOUR:waitTime 0.3
 FOUR:raiseArm
 FOUR:intakeUp
-FOUR:waitTime 0.1
+FOUR:waitTime 0.05
 FOUR:drive -11 -32
 FOUR:waitTime 0.05
 FOUR:rotate 0
@@ -135,7 +137,7 @@ FOUR:kick 0 -0.9 0
 FOUR:drive 0 12
 FOUR:rotate 180
 FOUR:intakeOn
-FOUR:driveM 0 -18 0.5
+FOUR:driveM 0 -18 0.3
 FOUR:waitTime 0.1
 FOUR:drive 0 10
 FOUR:waitTime 0.1
