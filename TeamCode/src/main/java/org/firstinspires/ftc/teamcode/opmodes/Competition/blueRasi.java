@@ -29,8 +29,8 @@ public class blueRasi extends BasicVisionOpMode {
     public void run() {
         String[] Tags = new String[1];
         JsonReader reader = new JsonReader("componentJson");
-        //Tags[0] = number.toString().toUpperCase();
-        Tags[0] = reader.getString("TAG");
+        Tags[0] = number.toString().toUpperCase();
+        //Tags[0] = reader.getString("TAG");
         rasiInterpreter.setTags(Tags);
         rasiInterpreter.compileRasi();
     }
