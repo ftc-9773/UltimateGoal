@@ -12,7 +12,7 @@ public class VelPIDController {
     public double KP;
     public double KI;
     public double KD;
-    private double integral;
+    public double integral;
     public double derivative;
     public double prevError;
     private double output;

@@ -113,7 +113,7 @@ public class Launcher {
                             velPID.resetPID();
                             return;
                         }
-                        Log.d("VelPID", "," + otherTimer.timeElapsed() + "," + velPID.prevError + "," + velPID.derivative + "," + isLaunch + "," + correction);
+                        Log.d("VelPID", "," + otherTimer.timeElapsed() + "," + velPID.prevError + "," + velPID.derivative + "," + velPID.integral + "," + isLaunch + "," + correction);
                         if (isLaunch == 1) isLaunch = 0;
                         Log.d("VelocityController", "Base power: " + motorBasePower + " made correction " + correction);
                         motorPower = motorBasePower + correction;
