@@ -114,45 +114,30 @@ FOUR:launch
 FOUR:motorsOff
 FOUR:drive 0 44
 FOUR:waitTime 0.05
-FOUR:rotate 180
+FOUR:rotate 200
 FOUR:waitTime 0.05
 FOUR:lowerArm
 FOUR:waitTime 0.05
 FOUR:openHook
 FOUR:waitTime 0.3
 FOUR:raiseArm
+FOUR:rotate 0
 FOUR:intakeUp
 FOUR:waitTime 0.05
-FOUR:drive -11 -32
-FOUR:waitTime 0.05
-FOUR:rotate 0
-FOUR:drive 0 -4
-FOUR:waitTime 0.05
-FOUR:driveM 0 -6 0.3
-FOUR:kick 0 -0.9 0
-FOUR:driveM 0 -6 0.3
-FOUR:kick 0 -0.9 0
-FOUR:driveM 0 -6 0.3
-FOUR:kick 0 -0.9 0
-FOUR:drive 0 12
-FOUR:rotate 180
-FOUR:intakeOn
-FOUR:driveM 0 -18 0.3
-FOUR:waitTime 0.1
-FOUR:drive 0 10
-FOUR:waitTime 0.1
-FOUR:setTrackedHeading 0
-FOUR:drive -5 0
 FOUR:lowerArm
 FOUR:waitTime 0.1
-FOUR:drive 6 -22
-FOUR:closeHook
+FOUR:drive -45 -50
+FOUR:setTrackedHeading -10
 FOUR:waitTime 0.5
+FOUR:drive 7 -7
+FOUR:closeHook
+FOUR:waitTime 1
 FOUR:raiseArm
+FOUR:drive 0 20
 FOUR:setTrackedHeading 180
-FOUR:drive 40 65
+FOUR:drive 40 35
 FOUR:lowerArm
 FOUR:openHook
 FOUR:waitTime 0.1
-FOUR:drive 0 -30
+FOUR:drive 0 -15
 
