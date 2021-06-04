@@ -11,7 +11,7 @@
   "motorWindow" : 5,
 
   "lkp" : 0.002,
-  "lki" : 0.0004,
+  "lki" : 0.0003,
   "lkd" : 0.0002,
   "lDecay": 0.09,
 
@@ -19,7 +19,7 @@
   "drivebaseYslow" : 0.2,
   "drivebaseRslow" : 0.3,
 
-  "inServoUp" : 0.5,
+  "inServoUp" : 0.2,
   "inServoDown" : 1.0,
 
   "TAG" : "FOUR"

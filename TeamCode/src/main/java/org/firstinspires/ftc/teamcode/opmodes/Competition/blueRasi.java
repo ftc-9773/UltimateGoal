@@ -22,7 +22,7 @@ public class blueRasi extends BasicVisionOpMode {
         super.initialise();
         rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/ftc9773/2021/rasi/", "blue.rasi");
         rasiInterpreter.processRasiCommands(new RobotV1Commands());
-        //updateReadings();
+        updateReadings();
     }
 
     @Override
